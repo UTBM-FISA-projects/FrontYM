@@ -15,7 +15,7 @@ const Login = () => (
                     </FloatingLabel>
                     <Stack gap={2} className="mt-4">
                         <Button variant="success" type="submit">Connexion</Button>
-                        <Button size="sm" variant="outline-secondary">S'inscrire</Button>
+                        <Button size="sm" variant="outline-secondary" as="a" href="/inscription">S'inscrire</Button>
                     </Stack>
                 </Form>
             </Card.Body>

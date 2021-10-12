@@ -1,0 +1,15 @@
+body{
+    background-image : url("../../Images/bg_auth.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+.titreInscription{
+    color: #c7a500 ;
+}
+
+.margingroup{
+    margin-right: 1em;
+}

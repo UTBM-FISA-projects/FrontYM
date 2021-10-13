@@ -1,6 +1,9 @@
 import React from 'react';
-import './Login.css';
+import { Link } from 'react-router-dom';
+
 import { Button, Card, Container, FloatingLabel, Form, Stack } from 'react-bootstrap';
+
+import './Login.css';
 
 const Login = () => (
     <Container className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
@@ -15,7 +18,7 @@ const Login = () => (
                     </FloatingLabel>
                     <Stack gap={2} className="mt-4">
                         <Button variant="success" type="submit">Connexion</Button>
-                        <Button size="sm" variant="outline-secondary" as="a" href="/inscription">S'inscrire</Button>
+                        <Button size="sm" variant="outline-secondary" as={Link} to="/inscription">S'inscrire</Button>
                     </Stack>
                 </Form>
             </Card.Body>

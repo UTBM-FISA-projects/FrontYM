@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 
 import { Button, Card, Container, FloatingLabel, Form, Stack } from 'react-bootstrap';
 
-import './Login.css';
-
 const Login = () => (
-    <Container className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+    <Container id="bg" className="d-flex justify-content-center align-items-center">
         <Card>
             <Card.Body>
                 <Form>

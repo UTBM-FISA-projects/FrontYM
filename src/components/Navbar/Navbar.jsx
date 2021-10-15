@@ -8,10 +8,10 @@ import NotificationPopover from './NotificationPopover';
 
 import { theme } from '../../utils';
 
-import logo from '../../images/logo_light.png';
+import logo from '../../assets/logo_light.png';
 
 const Navbar = () => (
-    <BsNavbar fixed="top" bg="dark" variant="dark" expand="md">
+    <BsNavbar sticky="top" className="mb-3" bg="dark" variant="dark" expand="md">
         <BsNavbar.Brand as={Link} to="/dashboard">
             <img src={logo} height={30} alt="Logo Yard Management" />
         </BsNavbar.Brand>

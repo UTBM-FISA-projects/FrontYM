@@ -1,14 +1,17 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
-import { DashboardChantier, Inscription, Login } from './pages';
+import { DashboardChantier, Availability, Inscription, Login } from './pages';
+
+import './assets/App.css';
 
 const App = () => (
     <BrowserRouter>
         <Switch>
-            <Route component={Login} path="/login" exact />
-            <Route component={Inscription} path="/Inscription" exact />
             <Route component={DashboardChantier} path="/DashboardChantier" exact />
-            <Redirect to="/login" />
+            <Route component={Login} path="/connexion" exact />
+            <Route component={Inscription} path="/inscription" exact />
+            <Route component={Availability} path="/disponibilites" exact />
+            <Redirect to="/connexion" />
         </Switch>
     </BrowserRouter>
 );

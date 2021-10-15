@@ -1,7 +1,9 @@
-body{
-    background-image: url("../../images/bg_auth.jpg");
+#bg {
+    background-image: url("bg_auth.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
     background-position: center;
+    min-width: 100vw;
+    min-height: 100vh;
 }

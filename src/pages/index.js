@@ -1,2 +1,3 @@
-export { Login } from './Login';
-export { Inscription } from './Inscription';
+export { default as Login } from './Login';
+export { default as Inscription } from './Inscription';
+export { Availability } from './Availability';

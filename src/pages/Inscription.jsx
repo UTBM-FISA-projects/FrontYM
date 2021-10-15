@@ -1,17 +1,21 @@
 import React, { useRef, useState } from 'react';
-import './Inscription.css';
-import { Button, Card, Container, FloatingLabel, Form, Overlay, Tooltip } from 'react-bootstrap';
+
+import { Button, Card, Container, FloatingLabel, Form, Overlay, Stack, Tooltip } from 'react-bootstrap';
 
 const Inscription = () => {
     const [show, setShow] = useState(false);
     const target = useRef(null);
+
     return (
-        <Container className="d-flex  justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <Container id="bg" className="d-flex justify-content-center align-items-center">
             <Card>
                 <Card.Header
                     as="h2"
-                    className="titreInscription d-flex justify-content-center"
-                >Inscription</Card.Header>
+                    className="d-flex justify-content-center"
+                    style={{ color: '#c7a500' }}
+                >
+                    Inscription
+                </Card.Header>
                 <Card.Body>
                     <Form.Select aria-label="Default select example" size="lg" className="mb-3">
                         <option>Qui êtes vous ?</option>
@@ -36,23 +40,25 @@ const Inscription = () => {
                         />
                         <Overlay target={target.current} show={show} placement="top">
                             {(props) => (
-                                <Tooltip id="overlay-example" {...props}>
+                                <Tooltip {...props}>
                                     Attention cette adresse e-mail sera votre identifiant !
                                 </Tooltip>
                             )}
                         </Overlay>
                     </FloatingLabel>
-                    <div className="input-group">
-                        <FloatingLabel label="Mot de passe" className="mb-3 margingroup">
+                    <Stack direction="horizontal" gap={3}>
+                        <FloatingLabel label="Mot de passe" className="mb-3">
                             <Form.Control required placeholder="Mot de passe" size="lg" type="password" />
                         </FloatingLabel>
                         <FloatingLabel label="Confirmation du mot de passe" className="mb-3">
-                            <Form.Control required
-                                          placeholder="Confirmation du mot de passe"
-                                          size="lg"
-                                          type="password" />
+                            <Form.Control
+                                required
+                                placeholder="Confirmation du mot de passe"
+                                size="lg"
+                                type="password"
+                            />
                         </FloatingLabel>
-                    </div>
+                    </Stack>
                     <div className="text-center">
                         <Button variant="success">S'inscrire</Button>
                     </div>

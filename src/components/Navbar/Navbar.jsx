@@ -12,7 +12,7 @@ import logo from '../../assets/logo_light.png';
 
 const Navbar = () => (
     <BsNavbar sticky="top" className="mb-3" bg="dark" variant="dark" expand="md">
-        <BsNavbar.Brand as={Link} to="/dashboard">
+        <BsNavbar.Brand as={Link} to="/chantiers">
             <img src={logo} height={30} alt="Logo Yard Management" />
         </BsNavbar.Brand>
         <BsNavbar.Toggle />

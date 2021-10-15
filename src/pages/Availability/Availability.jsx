@@ -11,7 +11,7 @@ const Availability = () => {
         <>
             <Navbar />
             <Container>
-                <Card className="mb-5" style={{ boxShadow: `0 0 20px ${theme.secondaryDark}` }}>
+                <Card className="mb-5" style={{ boxShadow: `0 0 12px ${theme.secondaryDark}` }}>
                     <Card.Body>
                         <Card.Title as="h2" style={{ color: theme.primaryDark }}><u><strong>Disponibilités</strong></u></Card.Title>
                         <Card.Subtitle className="text-muted">

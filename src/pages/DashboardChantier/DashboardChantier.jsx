@@ -1,23 +1,28 @@
 import React from 'react';
-import './DashboardChantier.css';
-import { Card, Container } from 'react-bootstrap';
+
+import { Card, Container, Stack } from 'react-bootstrap';
 import { PlusSquare } from 'react-bootstrap-icons';
 
-const DashboardChantier = () => (
-        <Container className="container">
-            <Card className="VosChantiers">
-                <Card.Body>
-                    <h1>Vos chantiers</h1>
-                </Card.Body>
-            </Card>
-            <Card className="CardChantier">
-                <Card.Body>
-                    <PlusSquare size="4em" />
-                </Card.Body>
-            </Card>
-        </Container>
+import { Navbar } from '../../components';
 
-    )
-;
+const DashboardChantier = () => (
+    <>
+        <Navbar />
+        <Container className="text-center">
+            <Stack gap={4}>
+                <Card>
+                    <Card.Body>
+                        <h1>Vos chantiers</h1>
+                    </Card.Body>
+                </Card>
+                <Card>
+                    <Card.Body>
+                        <PlusSquare size="4em" />
+                    </Card.Body>
+                </Card>
+            </Stack>
+        </Container>
+    </>
+);
 
 export default DashboardChantier;

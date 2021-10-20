@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { Button, Card, Container, FloatingLabel, Form, Spinner, Stack } from 'react-bootstrap';
+import { Card, Container, FloatingLabel, Form, Stack } from 'react-bootstrap';
+import { Button } from '../../components';
 
 import sha512 from 'crypto-js/sha512';
 
@@ -65,21 +66,16 @@ const Login = () => {
                             <Button
                                 variant="success"
                                 type="submit"
-                                disabled={loading}
-                            >
-                                {loading ? (
-                                    <>
-                                        <Spinner size="sm" animation="border" />
-                                        {' '}Chargement
-                                    </>
-                                ) : 'Connexion'}
-                            </Button>
+                                loading={loading}
+                                children="Connexion"
+                            />
                             <Button
                                 size="sm"
                                 variant="outline-secondary"
                                 as={Link}
                                 to="/inscription"
                                 children="S'inscrire"
+                                disabled={loading}
                             />
                         </Stack>
                     </Form>

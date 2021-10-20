@@ -5,6 +5,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { PlusSquare } from 'react-bootstrap-icons';
 import { theme } from '../../utils';
+import { Link } from 'react-router-dom';
 
 const NouveauChantier = () => {
     return (
@@ -36,15 +37,14 @@ const NouveauChantier = () => {
                             </Col>
                         </Row>
                         <div className="d-flex justify-content-end">
-                            <Button variant="danger" style={{ marginRight: '1em' }}>Annuler</Button>
+                            <Button as={Link} to="/chantiers" variant="danger" className="me-3" children="Annuler" />
                             <Button variant="success">Créer</Button>
                         </div>
                     </Card.Body>
                 </Card>
             </Container>
         </>
-    )
-        ;
+    );
 };
 
 export default NouveauChantier;

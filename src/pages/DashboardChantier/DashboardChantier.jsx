@@ -4,6 +4,7 @@ import { Card, Container, Stack } from 'react-bootstrap';
 import { PlusSquare } from 'react-bootstrap-icons';
 
 import { Navbar } from '../../components';
+import { Link } from 'react-router-dom';
 
 const DashboardChantier = () => (
     <>
@@ -17,7 +18,9 @@ const DashboardChantier = () => (
                 </Card>
                 <Card>
                     <Card.Body>
-                        <PlusSquare size="4em" />
+                        <Link to="/nouveau/chantier">
+                            <PlusSquare size="4em" />
+                        </Link>
                     </Card.Body>
                 </Card>
             </Stack>

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Badge, Card, ProgressBar, Row } from 'react-bootstrap';
+import { Badge, Card, Col, ProgressBar, Row } from 'react-bootstrap';
 import { ThreeDotsVertical } from 'react-bootstrap-icons';
-import { Col } from 'reactstrap';
 import { theme } from '../../utils';
 import PropTypes from 'prop-types';
 

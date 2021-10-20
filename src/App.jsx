@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
-import { Availability, DashboardChantier, Inscription, Login, NouveauChantier, Profil } from './pages';
+import { Availability, DashboardChantier, Inscription, Kanban, ListeEmploye, Login, NouveauChantier, Profil } from './pages';
 
 import { Navbar } from './components';
 

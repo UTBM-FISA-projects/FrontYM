@@ -9,6 +9,11 @@ import { theme } from '../../utils';
 import 'react-quill/dist/quill.snow.css';
 
 const NouveauChantier = () => {
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     return (
         <Container>
             <Card>

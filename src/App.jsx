@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { Availability, DashboardChantier, Inscription, Login, NouveauChantier, Profil } from './pages';
@@ -15,23 +15,27 @@ const App = () => {
         request.get('/api/users/current').then(setUser);
     }, []);
 
+    const navbarRender = useMemo(() => (
+        <Navbar user={user} />
+    ), [user]);
+
     return (
         <BrowserRouter>
             <Switch>
                 <Route path="/chantiers" exact>
-                    <Navbar user={user} />
+                    {navbarRender}
                     <DashboardChantier />
                 </Route>
                 <Route path="/disponibilites" exact>
-                    <Navbar user={user} />
+                    {navbarRender}
                     <Availability />
                 </Route>
                 <Route path="/chantiers/nouveau" exact>
-                    <Navbar user={user} />
+                    {navbarRender}
                     <NouveauChantier />
                 </Route>
                 <Route path="/profil" exact>
-                    <Navbar user={user} />
+                    {navbarRender}
                     <Profil user={user} />
                 </Route>
                 <Route component={Login} path="/connexion" exact />

@@ -16,7 +16,7 @@ const send = (method, url, body = null, params = {}) => {
     return fetch(url, {
         method: method,
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data),
+        body: data ? JSON.stringify(data) : null,
         ...params,
     })
         .then(res => {
@@ -28,14 +28,8 @@ const send = (method, url, body = null, params = {}) => {
 };
 
 /**
- * Collection de fonctions de permettant d'envoyer des requête AJAX.
- *
- * @type {{
- *   post: (function(string, (Object|FormData)): Promise<Object>),
- *   get: (function(string): Promise<Object>),
- *   delete: (function(string): Promise<Object>),
- *   put: (function(string, (Object|FormData)): Promise<Object>)
- * }}
+ * Collection de fonctions de permettant d'envoyer des requête AJAX
+ * tout en vérifiant l'authentification.
  */
 const request = {
     /**

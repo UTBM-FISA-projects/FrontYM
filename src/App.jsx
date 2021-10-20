@@ -1,6 +1,6 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
-import { Availability, DashboardChantier, Inscription, Login, NouveauChantier } from './pages';
+import { Availability, DashboardChantier, Inscription, ListeEmploye, Login, NouveauChantier } from './pages';
 
 import './assets/App.css';
 
@@ -12,6 +12,7 @@ const App = () => (
             <Route component={Inscription} path="/inscription" exact />
             <Route component={Availability} path="/disponibilites" exact />
             <Route component={NouveauChantier} path="/NouveauChantier" exact />
+            <Route component={ListeEmploye} path="/ListeDesEmployees" exact />
             <Redirect to="/connexion" />
         </Switch>
     </BrowserRouter>

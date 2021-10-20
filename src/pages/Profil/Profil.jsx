@@ -2,12 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button } from '../../components';
 import ReactQuill from 'react-quill';
 
-import { theme, userType } from '../../utils';
+import { request, theme, userType } from '../../utils';
+import 'react-quill/dist/quill.snow.css';
 
 const Profil = ({ user: userProps }) => {
     const [user, setUser] = React.useState({});
+    const [enterprise, setEnterprise] = React.useState({});
+    const [saving, setSaving] = React.useState(false);
 
     const {
         name,
@@ -22,6 +26,12 @@ const Profil = ({ user: userProps }) => {
         setUser(userProps);
     }, [userProps]);
 
+    React.useEffect(() => {
+        if (id_enterprise) {
+            request.get(`/api/users/${id_enterprise}`).then(setEnterprise);
+        }
+    }, [id_enterprise]);
+
     const handleChange = React.useCallback(({ target: { name, value } }) => {
         setUser(prevState => ({
             ...prevState,
@@ -29,10 +39,25 @@ const Profil = ({ user: userProps }) => {
         }));
     }, []);
 
+    const handleQuillChange = React.useCallback((content) => {
+        setUser(prevState => ({
+            ...prevState,
+            description: content,
+        }));
+    }, []);
+
+    const handleSubmit = React.useCallback((e) => {
+        e.preventDefault();
+        setSaving(true);
+        request.put('/api/users', user).then(() => {
+            setSaving(false);
+        });
+    }, [user]);
+
     return (
         <Container>
             <Card>
-                <Card.Body as={Form}>
+                <Card.Body as={Form} onSubmit={handleSubmit}>
                     <Card.Title as="h2" style={{ color: theme.primaryDark }}>
                         <u><strong>Profil</strong></u>
                     </Card.Title>
@@ -46,23 +71,39 @@ const Profil = ({ user: userProps }) => {
                         <Col sm={7}>
                             <Form.Control plaintext value={name} name="name" onChange={handleChange} />
                             <p>{userType.names[type]}</p>
-                            <p>Entreprise d'appartenance : {id_enterprise}</p>
+                            <p>Entreprise d'appartenance : {enterprise.name}</p>
                         </Col>
                     </Row>
-                    <Form.Label>Description</Form.Label>
-                    <ReactQuill theme="snow" className="mb-4" />
                     <Form.Group as={Row} className="mb-2">
                         <Form.Label column children="Email :" sm={2} />
                         <Col sm={10}>
                             <Form.Control type="email" plaintext value={email} name="email" onChange={handleChange} />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row}>
+                    <Form.Group as={Row} className="mb-4">
                         <Form.Label column children="Téléphone :" sm={2} />
                         <Col sm={10}>
                             <Form.Control type="tel" plaintext name="phone" value={phone} onChange={handleChange} />
                         </Col>
                     </Form.Group>
+                    <Form.Label>Description</Form.Label>
+                    <ReactQuill
+                        value={description || ''}
+                        onChange={handleQuillChange}
+                        placeholder="Description ..."
+                        className="mb-4"
+                    />
+                    <div className="d-flex justify-content-end">
+                        <Button
+                            variant="danger"
+                            className="me-3"
+                            onClick={() => {
+                                setUser(userProps);
+                            }}
+                            children="Annuler"
+                        />
+                        <Button variant="success" type="submit" loading={saving}>Sauvegarder</Button>
+                    </div>
                 </Card.Body>
             </Card>
         </Container>

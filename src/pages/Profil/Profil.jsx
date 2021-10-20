@@ -69,11 +69,19 @@ const Profil = ({ user: userProps }) => {
                             {React.createElement(userType.icons[type], { size: '100%', className: 'px-5' })}
                         </Col>
                         <Col sm={7}>
-                            <Form.Control plaintext value={name} name="name" onChange={handleChange} />
-                            <p>{userType.names[type]}</p>
-                            <p>Entreprise d'appartenance : {enterprise.name}</p>
+                            <h2><Form.Control plaintext value={name} name="name" onChange={handleChange} /></h2>
+                            <div className="text-muted">{userType.names[type]}</div>
+                            {type === 'supervisor' && <div>Entreprise d'appartenance : {enterprise.name}</div>}
                         </Col>
                     </Row>
+                    <Form.Label as="h3" className="mb-3" style={{ color: theme.primaryDark }}>Description</Form.Label>
+                    <ReactQuill
+                        value={description || ''}
+                        onChange={handleQuillChange}
+                        placeholder="Description ..."
+                        className="mb-5"
+                    />
+                    <h3 style={{ color: theme.primaryDark }}>Informations personnelles</h3>
                     <Form.Group as={Row} className="mb-2">
                         <Form.Label column children="Email :" sm={2} />
                         <Col sm={10}>
@@ -86,13 +94,6 @@ const Profil = ({ user: userProps }) => {
                             <Form.Control type="tel" plaintext name="phone" value={phone} onChange={handleChange} />
                         </Col>
                     </Form.Group>
-                    <Form.Label>Description</Form.Label>
-                    <ReactQuill
-                        value={description || ''}
-                        onChange={handleQuillChange}
-                        placeholder="Description ..."
-                        className="mb-4"
-                    />
                     <div className="d-flex justify-content-end">
                         <Button
                             variant="danger"

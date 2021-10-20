@@ -1,22 +1,45 @@
+import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
-import { Availability, DashboardChantier, Inscription, Login, NouveauChantier } from './pages';
+import { Availability, DashboardChantier, Inscription, Login, NouveauChantier, Profil } from './pages';
 
+import { Navbar } from './components';
+
+import { request } from './utils';
 import './assets/App.css';
-import { Profil } from './pages/Profil';
 
-const App = () => (
-    <BrowserRouter>
-        <Switch>
-            <Route component={DashboardChantier} path="/chantiers" exact />
-            <Route component={Login} path="/connexion" exact />
-            <Route component={Inscription} path="/inscription" exact />
-            <Route component={Availability} path="/disponibilites" exact />
-            <Route component={NouveauChantier} path="/nouveau/chantier" exact />
-            <Route component={Profil} path="/profil" exact />
-            <Redirect to="/connexion" />
-        </Switch>
-    </BrowserRouter>
-);
+const App = () => {
+    const [user, setUser] = React.useState({});
+
+    React.useEffect(() => {
+        request.get('/api/users/current').then(setUser);
+    }, []);
+
+    return (
+        <BrowserRouter>
+            <Switch>
+                <Route path="/chantiers" exact>
+                    <Navbar user={user} />
+                    <DashboardChantier />
+                </Route>
+                <Route path="/disponibilites" exact>
+                    <Navbar user={user} />
+                    <Availability />
+                </Route>
+                <Route path="/chantiers/nouveau" exact>
+                    <Navbar user={user} />
+                    <NouveauChantier />
+                </Route>
+                <Route path="/profil" exact>
+                    <Navbar user={user} />
+                    <Profil user={user} />
+                </Route>
+                <Route component={Login} path="/connexion" exact />
+                <Route component={Inscription} path="/inscription" exact />
+                <Redirect to="/connexion" />
+            </Switch>
+        </BrowserRouter>
+    );
+};
 
 export default App;

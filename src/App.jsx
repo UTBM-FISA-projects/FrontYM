@@ -1,7 +1,16 @@
 import React, { useMemo } from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
-import { Availability, DashboardChantier, Inscription, Kanban, ListeEmploye, Login, NouveauChantier, Profil } from './pages';
+import {
+    Availability,
+    DashboardChantier,
+    Inscription,
+    Kanban,
+    ListeEmploye,
+    Login,
+    NouveauChantier,
+    Profil,
+} from './pages';
 
 import { Navbar } from './components';
 
@@ -37,6 +46,14 @@ const App = () => {
                 <Route path="/profil" exact>
                     {navbarRender}
                     <Profil user={user} />
+                </Route>
+                <Route path="/employes" exact>
+                    {navbarRender}
+                    <ListeEmploye />
+                </Route>
+                <Route path="/chantiers/:id_chantier">
+                    {navbarRender}
+                    <Kanban />
                 </Route>
                 <Route component={Login} path="/connexion" exact />
                 <Route component={Inscription} path="/inscription" exact />

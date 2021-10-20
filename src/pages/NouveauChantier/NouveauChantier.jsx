@@ -1,12 +1,17 @@
-import React from 'react';
-import { Button, Card, Col, Container, FloatingLabel, Form, Row } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Card, Col, Container, FloatingLabel, Form, FormControl, Modal, Row } from 'react-bootstrap';
 import { Navbar } from '../../components';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { PlusSquare } from 'react-bootstrap-icons';
 import { theme } from '../../utils';
+import { PlusSquare } from 'react-bootstrap-icons';
 
 const NouveauChantier = () => {
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     return (
         <>
             <Navbar />
@@ -30,7 +35,29 @@ const NouveauChantier = () => {
                             <Col>
                                 <Card className="mb-4">
                                     <Card.Body className="text-center">
-                                        <PlusSquare size="4em" className="my-2" />
+                                        <PlusSquare size="4em" className="my-2" onClick={handleShow} />
+                                        <>
+                                            <Modal show={show} onHide={handleClose}>
+                                                <Modal.Body>
+                                                    <FormControl
+                                                        placeholder="Rechercher"
+                                                        aria-label="Rechercher"
+                                                        aria-describedby="basic-addon1"
+                                                        className="mb-4 text-center"
+                                                    />
+                                                    <div className="d-flex justify-content-end">
+                                                        <Button variant="danger"
+                                                                onClick={handleClose}
+                                                                style={{ marginRight: '1em' }}>
+                                                            Annuler
+                                                        </Button>
+                                                        <Button variant="success" onClick={handleClose}>
+                                                            Ajouter
+                                                        </Button>
+                                                    </div>
+                                                </Modal.Body>
+                                            </Modal>
+                                        </>
                                     </Card.Body>
                                 </Card>
                             </Col>

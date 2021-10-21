@@ -9,6 +9,10 @@ const yardShape = {
     archived: PropTypes.bool,
     supervisor: PropTypes.shape(userShape),
     project_owner: PropTypes.shape(userShape).isRequired,
+    done_tasks: PropTypes.number,
+    total_tasks: PropTypes.number,
+    total_estimated_time: PropTypes.string,
+    total_time_spent: PropTypes.string,
 };
 
 export default yardShape;

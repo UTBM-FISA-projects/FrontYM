@@ -8,15 +8,20 @@ import { EyeFill, ThreeDotsVertical } from 'react-bootstrap-icons';
 import { TaskList } from '../TaskList';
 
 import { theme, yardShape } from '../../utils';
-
-const progress = 60;
+import { EstimatedTime } from '../EstimatedTime';
 
 const CardDashboardChantier = ({ userTypes, yard }) => {
     const {
         id_yard,
         name,
         supervisor,
+        done_tasks,
+        total_tasks,
+        total_estimated_time,
+        total_time_spent,
     } = yard;
+
+    const progress = Math.round(done_tasks * 100 / total_tasks);
 
     return (
         <Card>
@@ -33,8 +38,8 @@ const CardDashboardChantier = ({ userTypes, yard }) => {
                             <div className="mt-4">
                                 <h5>Progression générale</h5>
                                 <p>Progression du chantier</p>
-                                <ProgressBar now={progress} label={`${progress}%`} />
-                                <Badge bg="light" text="dark" className="mt-3">Temps de travail 0h/800h</Badge>
+                                <ProgressBar className="mb-2" now={progress} label={`${progress}%`} />
+                                <EstimatedTime spentTime={total_time_spent} estimatedTime={total_estimated_time} />
                             </div>
                         )}
                         {userTypes === 'prestataire' && (

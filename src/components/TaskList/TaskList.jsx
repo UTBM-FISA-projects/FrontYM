@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Badge, Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Badge, Card } from 'react-bootstrap';
 
 import { date, isValidId, request, theme } from '../../utils';
+import { EstimatedTime } from '../EstimatedTime';
 
 const TaskList = ({ id_yard, state }) => {
     const [tasks, setTasks] = React.useState([]);
@@ -22,12 +23,7 @@ const TaskList = ({ id_yard, state }) => {
                 <Card.Title as="h5" className="d-flex justify-content-between">
                     {task.title}
                     <small className="fs-6">
-                        <OverlayTrigger overlay={<Tooltip children="Temps passé" />}>
-                            <Badge bg={task.time_spent > task.estimated_time ? 'danger' : 'success'}>{task.time_spent}</Badge>
-                        </OverlayTrigger>{' '}
-                        <OverlayTrigger overlay={<Tooltip children="Temps estimé" />}>
-                            <Badge bg="secondary">{task.estimated_time}</Badge>
-                        </OverlayTrigger>
+                        <EstimatedTime spentTime={task.time_spent} estimatedTime={task.estimated_time} />
                     </small>
                 </Card.Title>
                 <Badge className="mb-2" bg="light" text="secondary">

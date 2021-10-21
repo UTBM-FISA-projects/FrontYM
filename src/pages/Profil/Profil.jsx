@@ -5,6 +5,8 @@ import { Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { Button } from '../../components';
 import ReactQuill from 'react-quill';
 
+import ModalChangePassword from './ModalChangePassword';
+
 import { request, theme, userType } from '../../utils';
 import 'react-quill/dist/quill.snow.css';
 
@@ -56,7 +58,7 @@ const Profil = ({ user: userProps }) => {
 
     return (
         <Container>
-            <Card>
+            <Card className="mb-5" style={{ boxShadow: `0 0 12px ${theme.secondaryDark}` }}>
                 <Card.Body as={Form} onSubmit={handleSubmit}>
                     <Card.Title as="h2" style={{ color: theme.primaryDark }}>
                         <u><strong>Profil</strong></u>
@@ -94,6 +96,7 @@ const Profil = ({ user: userProps }) => {
                             <Form.Control type="tel" plaintext name="phone" value={phone} onChange={handleChange} />
                         </Col>
                     </Form.Group>
+                    <ModalChangePassword />
                     <div className="d-flex justify-content-end">
                         <Button
                             variant="danger"

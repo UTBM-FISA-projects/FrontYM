@@ -18,7 +18,7 @@ import { request } from './utils';
 import './assets/App.css';
 
 const App = () => {
-    const [user, setUser] = React.useState({});
+    const [user, setUser] = React.useState({ id_user: 0 });
 
     React.useEffect(() => {
         request.get('/api/users/current').then(setUser);
@@ -33,7 +33,7 @@ const App = () => {
             <Switch>
                 <Route path="/chantiers" exact>
                     {navbarRender}
-                    <DashboardChantier />
+                    <DashboardChantier idUser={user.id_user} />
                 </Route>
                 <Route path="/disponibilites" exact>
                     {navbarRender}

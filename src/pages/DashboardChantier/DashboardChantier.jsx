@@ -20,6 +20,21 @@ const DashboardChantier = ({ idUser }) => {
         }
     }, [idUser]);
 
+    const handleDelete = React.useCallback((id_yard) => {
+        request.delete(`/api/yards/${id_yard}`).then(() => {
+            setYards(prevState => prevState.filter(item => item.id_yard !== id_yard));
+        });
+    }, []);
+
+    const handleArchive = React.useCallback((id_yard) => {
+        request.put(`/api/yards/${id_yard}`, {
+            archived: true,
+        })
+            .then(r => {
+                setYards(prevState => prevState.map(item => item.id_yard === id_yard ? r : item));
+            });
+    }, []);
+
     return (
         <Container className="text-center">
             <Stack gap={4} className="mb-5">
@@ -36,7 +51,12 @@ const DashboardChantier = ({ idUser }) => {
                     </Card.Body>
                 </Card>
                 {yards.map((yard) => (
-                    <CardDashboardChantier key={yard.id_yard} yard={yard} />
+                    <CardDashboardChantier
+                        key={yard.id_yard}
+                        yard={yard}
+                        onDelete={handleDelete}
+                        onArchive={handleArchive}
+                    />
                 ))}
             </Stack>
         </Container>

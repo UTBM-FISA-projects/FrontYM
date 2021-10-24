@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import { Badge, Card, Col, ProgressBar, Row } from 'react-bootstrap';
-import { EyeFill, ThreeDotsVertical } from 'react-bootstrap-icons';
+import { EyeFill } from 'react-bootstrap-icons';
 
 import { TaskList } from '../TaskList';
-
-import { isValidId, request, theme, yardShape } from '../../utils';
 import { EstimatedTime } from '../EstimatedTime';
 
-const CardDashboardChantier = ({ userTypes, yard }) => {
+import { isValidId, request, theme, yardShape } from '../../utils';
+import OptionsOverlay from './OptionsOverlay';
+
+const CardDashboardChantier = ({ userTypes, yard, onDelete, onArchive }) => {
     const {
         id_yard,
         name,
@@ -49,7 +50,7 @@ const CardDashboardChantier = ({ userTypes, yard }) => {
                             <div className="mt-4">
                                 <h4>Progression générale</h4>
                                 <div>Progression du chantier</div>
-                                <ProgressBar className="mb-2" now={progress} label={`${progress}%`} />
+                                <ProgressBar className="mb-2" now={progress} label={progress ? progress + '%' : ''} />
                                 <EstimatedTime spentTime={total_time_spent} estimatedTime={total_estimated_time} />
                             </div>
                         )}
@@ -70,7 +71,9 @@ const CardDashboardChantier = ({ userTypes, yard }) => {
                         <TaskList id_yard={id_yard} />
                     </Col>
                 </Row>
-                <div style={{ top: '2%', right: '0.5%', position: 'absolute' }}><ThreeDotsVertical /></div>
+                <div style={{ top: '2%', right: '0.5%', position: 'absolute' }}>
+                    <OptionsOverlay id_yard={id_yard} onDelete={onDelete} onArchive={onArchive} />
+                </div>
             </Card.Body>
         </Card>
     );
@@ -79,6 +82,8 @@ const CardDashboardChantier = ({ userTypes, yard }) => {
 CardDashboardChantier.propTypes = {
     userTypes: PropTypes.string,
     yard: PropTypes.shape(yardShape).isRequired,
+    onDelete: PropTypes.func,
+    onArchive: PropTypes.func,
 };
 
 export default CardDashboardChantier;

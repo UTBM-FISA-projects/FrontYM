@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import {
     Availability,
@@ -20,46 +20,51 @@ import './assets/App.css';
 const App = () => {
     const [user, setUser] = React.useState({ id_user: 0 });
 
+    const connexion = useRouteMatch({ path: '/connexion', exact: true });
+    const inscription = useRouteMatch({ path: '/inscription', exact: true });
+
+    const loggedPage = !connexion && !inscription;
+
     React.useEffect(() => {
-        request.get('/api/users/current').then(setUser);
-    }, []);
+        if (loggedPage) {
+            request.get('/api/users/current').then(setUser);
+        }
+    }, [loggedPage]);
 
     const navbarRender = useMemo(() => (
         <Navbar user={user} />
     ), [user]);
 
     return (
-        <BrowserRouter>
-            <Switch>
-                <Route path="/chantiers" exact>
-                    {navbarRender}
-                    <DashboardChantier idUser={user.id_user} />
-                </Route>
-                <Route path="/disponibilites" exact>
-                    {navbarRender}
-                    <Availability />
-                </Route>
-                <Route path="/chantiers/nouveau" exact>
-                    {navbarRender}
-                    <NouveauChantier />
-                </Route>
-                <Route path="/profil" exact>
-                    {navbarRender}
-                    <Profil user={user} />
-                </Route>
-                <Route path="/employes" exact>
-                    {navbarRender}
-                    <ListeEmploye />
-                </Route>
-                <Route path="/chantiers/:id_chantier">
-                    {navbarRender}
-                    <Kanban />
-                </Route>
-                <Route component={Login} path="/connexion" exact />
-                <Route component={Inscription} path="/inscription" exact />
-                <Redirect to="/connexion" />
-            </Switch>
-        </BrowserRouter>
+        <Switch>
+            <Route path="/chantiers" exact>
+                {navbarRender}
+                <DashboardChantier idUser={user.id_user} />
+            </Route>
+            <Route path="/disponibilites" exact>
+                {navbarRender}
+                <Availability />
+            </Route>
+            <Route path="/chantiers/nouveau" exact>
+                {navbarRender}
+                <NouveauChantier />
+            </Route>
+            <Route path="/profil" exact>
+                {navbarRender}
+                <Profil user={user} />
+            </Route>
+            <Route path="/employes" exact>
+                {navbarRender}
+                <ListeEmploye />
+            </Route>
+            <Route path="/chantiers/:id_chantier">
+                {navbarRender}
+                <Kanban />
+            </Route>
+            <Route component={Login} path="/connexion" exact />
+            <Route component={Inscription} path="/inscription" exact />
+            <Redirect to="/connexion" />
+        </Switch>
     );
 };
 

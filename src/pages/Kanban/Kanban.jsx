@@ -1,5 +1,4 @@
 import React, { useReducer, useState } from 'react';
-import { Navbar } from '../../components';
 import { Button, Card, Col, Container, FloatingLabel, Form, Modal, Row } from 'react-bootstrap';
 import { theme } from '../../utils';
 import ReactQuill from 'react-quill';
@@ -51,105 +50,102 @@ const Kanban = () => {
     const handleShow = () => setShow(true);
 
     return (
-        <>
-            <Navbar />
-            <Container>
-                <Row>
-                    <Col>
-                        <Card style={{ borderColor: colors.secondaryBlue }}>
-                            <Card.Header as="h2"
-                                         className="text-center mb-4"
-                                         style={{
-                                             color: colors.secondaryBlue,
-                                             borderColor: colors.secondaryBlue,
-                                             backgroundColor: colors.transparentBlue,
-                                         }}>
-                                À faire
-                            </Card.Header>
-                            <Card.Body>
-                                <div className="d-flex justify-content-end">
-                                    <Button variant="success" onClick={handleShow}>Ajouter Mission</Button>
-                                </div>
-                                <>
-                                    <Modal show={show} onHide={handleClose}>
-                                        <Modal.Body>
-                                            <h2 style={{ color: theme.primaryDark }} className="mb-4">
-                                                <u>
-                                                    <strong>Nouvelle mission</strong>
-                                                </u>
-                                            </h2>
-                                            <FloatingLabel label="Nom de la mission" className="mb-4">
-                                                <Form.Control required
-                                                              placeholder="Nom de la mission"
-                                                              size="lg"
-                                                              type="text" />
-                                            </FloatingLabel>
-                                            <ReactQuill theme="snow" className="mb-4" />
-                                            <Card.Text className="mb-3">Période estimée</Card.Text>
-                                            {
-                                                App()
-                                            }
-                                            <FloatingLabel label="Temps estimé" className="mt-3 mb-4">
-                                                <Form.Control placeholder="Temps estimé" size="lg" type="text" />
-                                            </FloatingLabel>
-                                            <Card.Text className="mb-3">Entreprise assignée à la mission</Card.Text>
-                                            <Form.Select aria-label="Entreprise assignée" className="mb-3">
-                                                <option>Entreprise assignée</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
-                                                <option value="4">Viva l'algérie !</option>
-                                            </Form.Select>
-                                            <div className="d-flex justify-content-end">
-                                                <Button variant="danger"
-                                                        onClick={handleClose}
-                                                        style={{ marginRight: '1em' }}>
-                                                    Annuler
-                                                </Button>
-                                                <Button variant="success" onClick={handleClose}>
-                                                    Ajouter
-                                                </Button>
-                                            </div>
-                                        </Modal.Body>
-                                    </Modal>
-                                </>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col>
-                        <Card style={{ borderColor: theme.primaryDark }}>
-                            <Card.Header as="h2"
-                                         className="text-center mb-4"
-                                         style={{
-                                             color: theme.primaryDark,
-                                             backgroundColor: colors.transparentYellow,
-                                             borderColor: theme.primaryDark,
-                                         }}>
-                                En cours
-                            </Card.Header>
-                            <Card.Body>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col>
-                        <Card style={{ borderColor: colors.secondaryGreen }}>
-                            <Card.Header as="h2"
-                                         className="text-center mb-4"
-                                         style={{
-                                             color: colors.secondaryGreen,
-                                             borderColor: colors.secondaryGreen,
-                                             backgroundColor: colors.transparentGreen,
-                                         }}>
-                                Fait
-                            </Card.Header>
-                            <Card.Body>
+        <Container>
+            <Row>
+                <Col>
+                    <Card style={{ borderColor: colors.secondaryBlue }}>
+                        <Card.Header as="h2"
+                                     className="text-center mb-4"
+                                     style={{
+                                         color: colors.secondaryBlue,
+                                         borderColor: colors.secondaryBlue,
+                                         backgroundColor: colors.transparentBlue,
+                                     }}>
+                            À faire
+                        </Card.Header>
+                        <Card.Body>
+                            <div className="d-flex justify-content-end">
+                                <Button variant="success" onClick={handleShow}>Ajouter Mission</Button>
+                            </div>
+                            <>
+                                <Modal show={show} onHide={handleClose}>
+                                    <Modal.Body>
+                                        <h2 style={{ color: theme.primaryDark }} className="mb-4">
+                                            <u>
+                                                <strong>Nouvelle mission</strong>
+                                            </u>
+                                        </h2>
+                                        <FloatingLabel label="Nom de la mission" className="mb-4">
+                                            <Form.Control required
+                                                          placeholder="Nom de la mission"
+                                                          size="lg"
+                                                          type="text" />
+                                        </FloatingLabel>
+                                        <ReactQuill theme="snow" className="mb-4" />
+                                        <Card.Text className="mb-3">Période estimée</Card.Text>
+                                        {
+                                            App()
+                                        }
+                                        <FloatingLabel label="Temps estimé" className="mt-3 mb-4">
+                                            <Form.Control placeholder="Temps estimé" size="lg" type="text" />
+                                        </FloatingLabel>
+                                        <Card.Text className="mb-3">Entreprise assignée à la mission</Card.Text>
+                                        <Form.Select aria-label="Entreprise assignée" className="mb-3">
+                                            <option>Entreprise assignée</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                            <option value="4">Viva l'algérie !</option>
+                                        </Form.Select>
+                                        <div className="d-flex justify-content-end">
+                                            <Button variant="danger"
+                                                    onClick={handleClose}
+                                                    style={{ marginRight: '1em' }}>
+                                                Annuler
+                                            </Button>
+                                            <Button variant="success" onClick={handleClose}>
+                                                Ajouter
+                                            </Button>
+                                        </div>
+                                    </Modal.Body>
+                                </Modal>
+                            </>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col>
+                    <Card style={{ borderColor: theme.primaryDark }}>
+                        <Card.Header as="h2"
+                                     className="text-center mb-4"
+                                     style={{
+                                         color: theme.primaryDark,
+                                         backgroundColor: colors.transparentYellow,
+                                         borderColor: theme.primaryDark,
+                                     }}>
+                            En cours
+                        </Card.Header>
+                        <Card.Body>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col>
+                    <Card style={{ borderColor: colors.secondaryGreen }}>
+                        <Card.Header as="h2"
+                                     className="text-center mb-4"
+                                     style={{
+                                         color: colors.secondaryGreen,
+                                         borderColor: colors.secondaryGreen,
+                                         backgroundColor: colors.transparentGreen,
+                                     }}>
+                            Fait
+                        </Card.Header>
+                        <Card.Body>
 
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
-            </Container>
-        </>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 

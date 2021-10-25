@@ -1,18 +1,15 @@
 import React from 'react';
-import { Badge, Card, Col, ProgressBar, Row } from 'react-bootstrap';
-import { ThreeDotsVertical } from 'react-bootstrap-icons';
-import { theme } from '../../utils';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { Badge, Card, Col, ProgressBar, Row } from 'react-bootstrap';
-import { EyeFill } from 'react-bootstrap-icons';
 
 import { TaskList } from '../TaskList';
 import { EstimatedTime } from '../EstimatedTime';
+import OptionsOverlay from './OptionsOverlay';
 
 import { isValidId, request, theme, yardShape } from '../../utils';
-import OptionsOverlay from './OptionsOverlay';
+import { EyeFill } from 'react-bootstrap-icons';
 
 const CardDashboardChantier = ({ userTypes, yard, onDelete, onArchive }) => {
     const {

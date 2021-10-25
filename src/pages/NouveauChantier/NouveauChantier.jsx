@@ -13,7 +13,7 @@ const NouveauChantier = () => (
         <Card>
             <Card.Body>
                 <Card.Title as="h2" style={{ color: theme.primaryDark }} className="mb-4">
-                    <u><strong>Nouveau chantier</strong></u>
+                    <strong>Nouveau chantier</strong>
                 </Card.Title>
                 <FloatingLabel label="Nom du chantier" className="mb-4">
                     <Form.Control required placeholder="Nom du chantier" size="lg" type="text" />

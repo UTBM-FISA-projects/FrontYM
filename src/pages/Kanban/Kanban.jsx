@@ -71,9 +71,7 @@ const Kanban = () => {
                                 <Modal show={show} onHide={handleClose}>
                                     <Modal.Body>
                                         <h2 style={{ color: theme.primaryDark }} className="mb-4">
-                                            <u>
-                                                <strong>Nouvelle mission</strong>
-                                            </u>
+                                            <strong>Nouvelle mission</strong>
                                         </h2>
                                         <FloatingLabel label="Nom de la mission" className="mb-4">
                                             <Form.Control required

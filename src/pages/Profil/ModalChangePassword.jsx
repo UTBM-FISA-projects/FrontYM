@@ -3,7 +3,7 @@ import React from 'react';
 import { FloatingLabel, Form, Modal } from 'react-bootstrap';
 import { Button } from '../../components';
 
-import { request } from '../../utils';
+import { request, theme } from '../../utils';
 import sha512 from 'crypto-js/sha512';
 
 const ModalChangePassword = () => {
@@ -34,7 +34,9 @@ const ModalChangePassword = () => {
             />
             <Modal show={show} onHide={() => {setShow(false);}}>
                 <Form onSubmit={handleSubmit}>
-                    <Modal.Header children="Changement de mot de passe" />
+                    <Modal.Header style={{ color: theme.primaryDark }}>
+                        <strong>Changement de mot de passe</strong>
+                    </Modal.Header>
                     <Modal.Body>
                         <FloatingLabel label="Ancien mot de passe" className="mb-4">
                             <Form.Control

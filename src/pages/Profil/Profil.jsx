@@ -61,7 +61,7 @@ const Profil = ({ user: userProps }) => {
             <Card className="mb-5" style={{ boxShadow: `0 0 12px ${theme.secondaryDark}` }}>
                 <Card.Body as={Form} onSubmit={handleSubmit}>
                     <Card.Title as="h2" style={{ color: theme.primaryDark }}>
-                        <u><strong>Profil</strong></u>
+                        <strong>Profil</strong>
                     </Card.Title>
                     <Card.Subtitle className="text-muted mb-5">
                         Ici vous pouvez consulter ou modifier votre profil.

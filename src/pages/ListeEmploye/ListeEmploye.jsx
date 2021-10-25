@@ -9,7 +9,7 @@ const ListeEmploye = () => (
         <Card>
             <Card.Body>
                 <Card.Title as="h2" className="text-center mb-4" style={{ color: theme.primaryDark }}>
-                    <u><strong>Employés</strong></u>
+                    <strong>Employés</strong>
                 </Card.Title>
                 <Table striped bordered hover>
                     <thead>

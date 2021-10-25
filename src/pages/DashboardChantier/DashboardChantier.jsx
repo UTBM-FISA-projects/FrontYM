@@ -7,7 +7,7 @@ import { PlusSquare } from 'react-bootstrap-icons';
 
 import { CardDashboardChantier } from '../../components';
 
-import { isValidId, request } from '../../utils';
+import { isValidId, request, theme } from '../../utils';
 
 const DashboardChantier = ({ idUser }) => {
     const [yards, setYards] = React.useState([]);
@@ -40,7 +40,9 @@ const DashboardChantier = ({ idUser }) => {
             <Stack gap={4} className="mb-5">
                 <Card>
                     <Card.Body>
-                        <h1>Vos chantiers</h1>
+                        <h1 style={{ color: theme.primaryDark }}>
+                            <strong>Vos chantiers</strong>
+                        </h1>
                     </Card.Body>
                 </Card>
                 <Card>

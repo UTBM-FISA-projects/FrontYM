@@ -1,10 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import AvailableTimes from 'react-available-times';
 import { Card, Container, Spinner } from 'react-bootstrap';
 
+import { Button } from '../../components';
+
 import { isValidId, request, theme } from '../../utils';
-import PropTypes from 'prop-types';
 
 /**
  * Formate les dates API en objet Date.
@@ -21,27 +23,44 @@ const formatDates = (list) => (
 
 const Availability = ({ idUser }) => {
     const [availabilities, setAvailabilities] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
 
     React.useEffect(() => {
         if (isValidId(idUser)) {
-            request.get(`/api/users/${idUser}/availabilities`).then(r => setAvailabilities(formatDates(r.data)));
+            setLoading(true);
+            request.get(`/api/users/${idUser}/availabilities`).then(r => {
+                setAvailabilities(formatDates(r.data));
+                setLoading(false);
+            });
         }
     }, [idUser]);
+
+    const handleSave = React.useCallback(() => {
+        setLoading(true);
+        request.put('/api/availabilities', availabilities).then(r => {
+            setAvailabilities(formatDates(r.data));
+            setLoading(false);
+        });
+    }, [availabilities]);
 
     return (
         <Container>
             <Card className="mb-5" style={{ boxShadow: `0 0 12px ${theme.secondaryDark}` }}>
                 <Card.Body>
                     <Card.Title as="h2" style={{ color: theme.primaryDark }}>
-                        <u><strong>Disponibilités</strong></u>
+                        <strong>Disponibilités</strong>
                     </Card.Title>
                     <Card.Subtitle className="text-muted mb-3">
                         Remplissez les disponibilités de votre entreprise.
                     </Card.Subtitle>
-                    {availabilities.length !== 0 ? (
+                    <Button variant="success" children="Sauvegarder" onClick={handleSave} loading={loading} />
+                    {!loading ? (
                         <AvailableTimes
                             weekStartsOn="monday"
-                            onChange={setAvailabilities}
+                            onChange={(selections) => {
+                                console.log(selections);
+                                setAvailabilities(selections);
+                            }}
                             initialSelections={availabilities}
                         />
                     ) : (

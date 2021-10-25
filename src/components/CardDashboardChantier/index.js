@@ -1,1 +1,1 @@
-export default from './CardDashboardChantier';
+export { default as CardDashboardChantier } from './CardDashboardChantier';

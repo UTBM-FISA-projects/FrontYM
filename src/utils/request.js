@@ -8,7 +8,7 @@ import typeCheck from './typeCheck';
  * @param url {string} URL de la requête
  * @param body {Object|FormData} JSON a envoyer
  * @param params {Object}
- * @returns {Promise<Object>} Promesse contenant le JSON de réponse
+ * @returns {Promise<Object>|null} Promesse contenant le JSON de réponse
  */
 const send = (method, url, body = null, params = {}) => {
     const data = typeCheck(body, FormData) ? Object.fromEntries(body) : body;
@@ -23,7 +23,7 @@ const send = (method, url, body = null, params = {}) => {
             if (res.status === 401) {
                 window.location = '/connexion';
             }
-            return res.json();
+            return method === 'DELETE' ? null : res.json();
         });
 };
 

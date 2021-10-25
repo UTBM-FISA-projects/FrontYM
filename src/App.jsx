@@ -43,7 +43,7 @@ const App = () => {
             </Route>
             <Route path="/disponibilites" exact>
                 {navbarRender}
-                <Availability />
+                <Availability idUser={user.id_user} />
             </Route>
             <Route path="/chantiers/nouveau" exact>
                 {navbarRender}

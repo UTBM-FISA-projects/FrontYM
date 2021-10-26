@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Button, Card, Container, FloatingLabel, Form, Overlay, Stack, Tooltip } from 'react-bootstrap';
+
+import { theme } from '../../utils';
 
 const Inscription = () => {
     const [show, setShow] = useState(false);
@@ -12,12 +15,12 @@ const Inscription = () => {
                 <Card.Header
                     as="h2"
                     className="d-flex justify-content-center"
-                    style={{ color: '#c7a500' }}
+                    style={{ color: theme.primaryDark }}
                 >
                     Inscription
                 </Card.Header>
-                <Card.Body>
-                    <Form.Select aria-label="Default select example" size="lg" className="mb-3">
+                <Card.Body as={Form}>
+                    <Form.Select required size="lg" className="mb-3">
                         <option>Qui êtes vous ?</option>
                         <option value="1">Client</option>
                         <option value="2">Entreprise</option>
@@ -59,12 +62,22 @@ const Inscription = () => {
                             />
                         </FloatingLabel>
                     </Stack>
-                    <div className="text-center">
-                        <Button variant="success">S'inscrire</Button>
-                    </div>
+                    <Stack gap={2}>
+                        <Button variant="success" type="submit" className="mx-auto px-5">S'inscrire</Button>
+                        <Button
+                            as={Link}
+                            to="/connexion"
+                            type="button"
+                            variant="outline-secondary"
+                            size="sm"
+                            className="mx-auto px-5"
+                            children="Se connecter"
+                        />
+                    </Stack>
                 </Card.Body>
             </Card>
         </Container>
     );
 };
+
 export default Inscription;

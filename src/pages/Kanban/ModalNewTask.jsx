@@ -28,7 +28,7 @@ const ModalNewTask = ({ show, onClose }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     return (
-        <Modal show={show} onHide={onClose}>
+        <Modal show={show} onHide={onClose} backdrop="static">
             <Modal.Body>
                 <h2 style={{ color: theme.primaryDark }} className="mb-4">
                     <strong>Nouvelle mission</strong>
@@ -57,17 +57,14 @@ const ModalNewTask = ({ show, onClose }) => {
                             resetDates: 'Remettre à zéro',
                         }}
                         onDatesChange={data => dispatch({ type: 'dateChange', payload: data })}
-                        onFocusChange={focusedInput => dispatch({
-                            type: 'focusChange',
-                            payload: focusedInput,
-                        })}
+                        onFocusChange={focusedInput => dispatch({ type: 'focusChange', payload: focusedInput })}
                         startDate={state.startDate}
                         endDate={state.endDate}
                         focusedInput={state.focusedInput}
                     />
                 </div>
                 <FloatingLabel label="Temps estimé" className="mt-3 mb-5">
-                    <Form.Control placeholder="Temps estimé" size="lg" type="text" />
+                    <Form.Control placeholder="Temps estimé" size="lg" type="number" min="0" />
                 </FloatingLabel>
                 <Card.Text className="mb-3">Entreprise assignée à la mission</Card.Text>
                 <Form.Select aria-label="Entreprise assignée" className="mb-3">

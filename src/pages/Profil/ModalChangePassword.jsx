@@ -34,10 +34,10 @@ const ModalChangePassword = () => {
             />
             <Modal show={show} onHide={() => {setShow(false);}}>
                 <Form onSubmit={handleSubmit}>
-                    <Modal.Header style={{ color: theme.primaryDark }}>
-                        <strong>Changement de mot de passe</strong>
-                    </Modal.Header>
                     <Modal.Body>
+                        <h2 style={{ color: theme.primaryDark }} className="mb-4">
+                            <strong>Changement de mot de passe</strong>
+                        </h2>
                         <FloatingLabel label="Ancien mot de passe" className="mb-4">
                             <Form.Control
                                 required

@@ -57,10 +57,16 @@ const App = () => {
                 {navbarRender}
                 <ListeEmploye />
             </Route>
-            <Route path="/chantiers/:id_chantier">
-                {navbarRender}
-                <Kanban />
-            </Route>
+            <Route
+                path="/chantiers/:id_yard"
+                exact
+                render={({ match: { params: { id_yard } } }) => (
+                    <>
+                        {navbarRender}
+                        <Kanban id_yard={Number(id_yard)} />
+                    </>
+                )}
+            />
             <Route component={Login} path="/connexion" exact />
             <Route component={Inscription} path="/inscription" exact />
             <Redirect to="/connexion" />

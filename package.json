@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@datepicker-react/styled": "^2.8.4",
-    "@syncfusion/ej2-react-calendars": "^19.3.46",
     "crypto-js": "^4.1.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",

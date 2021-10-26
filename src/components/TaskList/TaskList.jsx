@@ -18,16 +18,18 @@ const TaskList = ({ id_yard, state }) => {
     }, [id_yard, state]);
 
     return tasks.map((task) => (
-        <Card key={task.id_task} className="m-3" style={{ boxShadow: `0 0 2px ${theme.primaryLight}` }}>
+        <Card key={task.id_task}
+              className="my-3 mx-2 overflow-hidden"
+              style={{ boxShadow: `0 0 2px ${theme.primaryLight}` }}>
             <Card.Body>
-                <Card.Title as="h5" className="d-flex justify-content-between">
+                <Card.Title as="h6" className="d-flex justify-content-between">
                     {task.title}
                     <small className="fs-6">
                         <EstimatedTime spentTime={task.time_spent} estimatedTime={task.estimated_time} />
                     </small>
                 </Card.Title>
-                <Badge className="mb-2" bg="light" text="secondary">
-                    Prochaine intervention : {date.long(task.start_planned_date)}
+                <Badge className="mb-2 text-wrap" bg="light" text="secondary">
+                    Début prévu : {date.long(task.start_planned_date)}
                 </Badge>
                 <Card.Text className="lh-1 text-muted"><small>{task.description}</small></Card.Text>
             </Card.Body>

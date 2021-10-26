@@ -7,6 +7,7 @@ import { TaskList } from '../../components/TaskList';
 import ModalNewTask from './ModalNewTask';
 
 import { theme } from '../../utils';
+import { PlusLg } from 'react-bootstrap-icons';
 
 const colors = {
     secondaryBlue: '#3399ff',
@@ -24,33 +25,31 @@ const Kanban = ({ id_yard }) => {
     return (
         <Container>
             <Row>
-                <Col>
+                <Col className="mb-3 overflow-auto">
                     <Card style={{ borderColor: colors.secondaryBlue }}>
                         <Card.Header
                             as="h2"
-                            className="text-center mb-4"
+                            className="text-center"
                             style={{
                                 color: colors.secondaryBlue,
                                 borderColor: colors.secondaryBlue,
                                 backgroundColor: colors.transparentBlue,
                             }}
                         >
-                            À faire
+                            À faire{' '}
+                            <Button onClick={handleShow} size="sm"><PlusLg /></Button>
                         </Card.Header>
-                        <TaskList id_yard={id_yard} state="done" />
-                        <Card.Body>
-                            <div className="d-flex justify-content-end">
-                                <Button variant="success" onClick={handleShow}>Ajouter Mission</Button>
-                            </div>
+                        <Card.Body className="overflow-auto">
+                            <TaskList id_yard={id_yard} state="todo" />
                             <ModalNewTask show={show} onClose={handleClose} />
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col>
+                <Col className="mb-3 overflow-auto">
                     <Card style={{ borderColor: theme.primaryDark }}>
                         <Card.Header
                             as="h2"
-                            className="text-center mb-4"
+                            className="text-center"
                             style={{
                                 color: theme.primaryDark,
                                 backgroundColor: colors.transparentYellow,
@@ -64,11 +63,11 @@ const Kanban = ({ id_yard }) => {
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col>
+                <Col className="mb-3 overflow-auto">
                     <Card style={{ borderColor: colors.secondaryGreen }}>
                         <Card.Header
                             as="h2"
-                            className="text-center mb-4"
+                            className="text-center"
                             style={{
                                 color: colors.secondaryGreen,
                                 borderColor: colors.secondaryGreen,

@@ -6,6 +6,7 @@ import ReactQuill from 'react-quill';
 import { DateRangeInput } from '@datepicker-react/styled';
 
 import { date, theme } from '../../utils';
+import { TimeInput } from '../../components';
 
 const initialState = {
     startDate: null,
@@ -29,7 +30,7 @@ const ModalNewTask = ({ show, onClose }) => {
 
     return (
         <Modal show={show} onHide={onClose} backdrop="static">
-            <Modal.Body>
+            <Modal.Body as={Form}>
                 <h2 style={{ color: theme.primaryDark }} className="mb-4">
                     <strong>Nouvelle mission</strong>
                 </h2>
@@ -43,7 +44,7 @@ const ModalNewTask = ({ show, onClose }) => {
                 </FloatingLabel>
                 <ReactQuill theme="snow" className="mb-5" />
                 <label>Période estimée</label>
-                <div id="date-range" style={{ zIndex: 10, position: 'relative' }}>
+                <div id="date-range" className="mb-3" style={{ zIndex: 10, position: 'relative' }}>
                     <DateRangeInput
                         showSelectedDates={false}
                         showClose={false}
@@ -63,9 +64,7 @@ const ModalNewTask = ({ show, onClose }) => {
                         focusedInput={state.focusedInput}
                     />
                 </div>
-                <FloatingLabel label="Temps estimé" className="mt-3 mb-5">
-                    <Form.Control placeholder="Temps estimé" size="lg" type="number" min="0" />
-                </FloatingLabel>
+                <TimeInput label="Temps estimé" className="mb-5" />
                 <Card.Text className="mb-3">Entreprise assignée à la mission</Card.Text>
                 <Form.Select aria-label="Entreprise assignée" className="mb-3">
                     <option>Entreprise assignée</option>

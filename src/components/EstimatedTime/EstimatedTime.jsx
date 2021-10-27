@@ -15,8 +15,8 @@ const EstimatedTime = ({ estimatedTime, spentTime }) => (
 );
 
 EstimatedTime.propTypes = {
-    estimatedTime: PropTypes.string.isRequired,
-    spentTime: PropTypes.string.isRequired,
+    estimatedTime: PropTypes.string,
+    spentTime: PropTypes.string,
 };
 
 export default EstimatedTime;

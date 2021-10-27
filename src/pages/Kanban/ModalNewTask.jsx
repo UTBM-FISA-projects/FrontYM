@@ -5,7 +5,11 @@ import { Button, Card, FloatingLabel, Form, Modal } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 import { DateRangeInput } from '@datepicker-react/styled';
 
-import { date, theme } from '../../utils';
+import { TimeInput } from '../../components';
+
+import { date, request, theme } from '../../utils';
+
+const timeRegex = new RegExp(/\d{2,}:[0-5]\d/);
 
 const initialState = {
     startDate: null,
@@ -24,8 +28,53 @@ function reducer(state, action) {
     }
 }
 
-const ModalNewTask = ({ show, onClose }) => {
+const ModalNewTask = ({ show, onClose, id_yard }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    const [data, setData] = React.useState({
+        title: '',
+        description: null,
+        state: 'todo',
+        estimated_time: null,
+        start_planned_date: null,
+        end_planned_date: null,
+        id_executor: null,
+        id_yard,
+    });
+
+    const [errors, setErrors] = React.useState({});
+
+    const handleSubmit = React.useCallback(() => {
+        if (data.estimated_time && !timeRegex.test(data.estimated_time)) {
+            setErrors({ estimated_time: true });
+            return;
+        }
+
+        request.post('/api/tasks', data).then(onClose);
+    }, [data, onClose]);
+
+    const handleDateChange = React.useCallback((data) => {
+        setData(prevState => ({
+            ...prevState,
+            start_planned_date: data.startDate,
+            end_planned_date: data.endDate,
+        }));
+        dispatch({ type: 'dateChange', payload: data });
+    }, []);
+
+    const handleChange = React.useCallback(({ target: { name, value } }) => {
+        setData(prevState => ({
+            ...prevState,
+            [name]: value,
+        }));
+    }, []);
+
+    const handleQuillChange = React.useCallback((value) => {
+        setData(prevState => ({
+            ...prevState,
+            description: value,
+        }));
+    }, []);
 
     return (
         <Modal show={show} onHide={onClose} backdrop="static">
@@ -39,35 +88,40 @@ const ModalNewTask = ({ show, onClose }) => {
                         placeholder="Nom de la mission"
                         size="lg"
                         type="text"
+                        name="title"
+                        value={data.title}
+                        onChange={handleChange}
                     />
                 </FloatingLabel>
-                <ReactQuill theme="snow" className="mb-5" />
+                <ReactQuill className="mb-5" value={data.description} onChange={handleQuillChange} />
                 <label>Période estimée</label>
-                <div id="date-range" style={{ zIndex: 10, position: 'relative' }}>
-                    <DateRangeInput
-                        showSelectedDates={false}
-                        showClose={false}
-                        displayFormat="dd/MM/yyyy"
-                        weekdayLabelFormat={date.weekday}
-                        monthLabelFormat={date.month}
-                        phrases={{
-                            startDatePlaceholder: 'Début',
-                            endDatePlaceholder: 'Fin',
-                            close: 'Fermer',
-                            resetDates: 'Remettre à zéro',
-                        }}
-                        onDatesChange={data => dispatch({ type: 'dateChange', payload: data })}
-                        onFocusChange={focusedInput => dispatch({ type: 'focusChange', payload: focusedInput })}
-                        startDate={state.startDate}
-                        endDate={state.endDate}
-                        focusedInput={state.focusedInput}
-                    />
-                </div>
-                <FloatingLabel label="Temps estimé" className="mt-3 mb-5">
-                    <Form.Control placeholder="Temps estimé" size="lg" type="number" min="0" />
-                </FloatingLabel>
+                <DateRangeInput
+                    showSelectedDates={false}
+                    showClose={false}
+                    displayFormat="dd/MM/yyyy"
+                    weekdayLabelFormat={date.weekday}
+                    monthLabelFormat={date.month}
+                    phrases={{
+                        startDatePlaceholder: 'Début',
+                        endDatePlaceholder: 'Fin',
+                        close: 'Fermer',
+                        resetDates: 'Remettre à zéro',
+                    }}
+                    onDatesChange={handleDateChange}
+                    onFocusChange={focusedInput => dispatch({ type: 'focusChange', payload: focusedInput })}
+                    startDate={data.start_planned_date}
+                    endDate={data.end_planned_date}
+                    focusedInput={state.focusedInput}
+                />
+                <TimeInput
+                    label="Temps estimé"
+                    className="mb-5"
+                    name="estimated_time"
+                    onChange={handleChange}
+                    invalid={errors.estimated_time}
+                />
                 <Card.Text className="mb-3">Entreprise assignée à la mission</Card.Text>
-                <Form.Select aria-label="Entreprise assignée" className="mb-3">
+                <Form.Select name="id_executor" className="mb-3" onChange={handleChange}>
                     <option>Entreprise assignée</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -76,7 +130,7 @@ const ModalNewTask = ({ show, onClose }) => {
                 </Form.Select>
                 <div className="d-flex justify-content-end">
                     <Button variant="danger" onClick={onClose} className="me-3">Annuler</Button>
-                    <Button variant="success" onClick={onClose}>Ajouter</Button>
+                    <Button variant="success" onClick={handleSubmit}>Ajouter</Button>
                 </div>
             </Modal.Body>
         </Modal>
@@ -86,6 +140,7 @@ const ModalNewTask = ({ show, onClose }) => {
 ModalNewTask.propTypes = {
     show: PropTypes.bool,
     onClose: PropTypes.func,
+    id_yard: PropTypes.number.isRequired,
 };
 
 export default ModalNewTask;

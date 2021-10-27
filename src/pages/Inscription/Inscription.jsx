@@ -65,7 +65,7 @@ const Inscription = () => {
                             />
                         </OverlayTrigger>
                     </FloatingLabel>
-                    <Stack direction="horizontal" gap={3}>
+                    <Stack direction="horizontal" gap={3} className="mb-5">
                         <FloatingLabel label="Mot de passe" className="mb-3">
                             <Form.Control
                                 required
@@ -90,8 +90,14 @@ const Inscription = () => {
                             variant="success"
                             loading={loading}
                             type="submit"
-                            className="mx-auto px-5"
+                            className="mx-10 px-5 position-absolute bottom-0 start-0 m-3"
                             children="S'inscrire"
+                        />
+                        <Button
+                            variant="danger"
+                            type="submit"
+                            className="mx-10 px-5 position-absolute bottom-0 end-0 m-3"
+                            children="Annuler"
                         />
                         <Button
                             as={Link}
@@ -100,7 +106,7 @@ const Inscription = () => {
                             type="button"
                             variant="outline-secondary"
                             size="sm"
-                            className="mx-auto px-5"
+                            className="mx-auto px-5 position-absolute bottom-0 start-50 translate-middle-x m-3"
                             children="Se connecter"
                         />
                     </Stack>

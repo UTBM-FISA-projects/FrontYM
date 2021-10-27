@@ -55,7 +55,7 @@ const App = () => {
             </Route>
             <Route path="/employes" exact>
                 {navbarRender}
-                <ListeEmploye />
+                <ListeEmploye idUser={user.id_user} />
             </Route>
             <Route
                 path="/chantiers/:id_yard"

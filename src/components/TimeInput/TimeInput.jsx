@@ -23,12 +23,22 @@ const TimeInput = (props) => {
         let afterColon = 0;
 
         const validateLetter = (letter) => {
+            // si c'est : et qu'il n'y en a pas d'autre -> OK
             if (letter === ':' && !colonFound) {
                 colonFound = true;
                 return true;
+                // si c'est un nombre ...
             } else if (allowedChars.exec(letter) !== null) {
-                if (afterColon < 2) {
-                    if (colonFound) ++afterColon;
+                // ... avant : -> OK
+                if (!colonFound) {
+                    return true;
+                    // ... des minutes -> OK
+                } else if (afterColon === 1) {
+                    ++afterColon;
+                    return true;
+                    // ... des dizaine de minute entre 0 et 5 -> OK
+                } else if (afterColon === 0 && /[0-5]/.exec(letter) !== null) {
+                    ++afterColon;
                     return true;
                 }
             }

@@ -19,8 +19,8 @@ const colors = {
 
 const Kanban = ({ id_yard }) => {
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = React.useCallback(() => {setShow(false);}, []);
+    const handleShow = React.useCallback(() => {setShow(true);}, []);
 
     return (
         <Container>
@@ -41,7 +41,7 @@ const Kanban = ({ id_yard }) => {
                         </Card.Header>
                         <Card.Body className="overflow-auto">
                             <TaskList id_yard={id_yard} state="todo" />
-                            <ModalNewTask show={show} onClose={handleClose} />
+                            <ModalNewTask id_yard={id_yard} show={show} onClose={handleClose} />
                         </Card.Body>
                     </Card>
                 </Col>

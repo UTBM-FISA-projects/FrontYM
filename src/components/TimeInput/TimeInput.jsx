@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 import { Form } from 'react-bootstrap';
 
+// Regex compilés
 const allowedChars = new RegExp(/\d/);
+const tensMinutes = new RegExp(/[0-5]/);
 
 const TimeInput = (props) => {
     const {
@@ -12,6 +14,7 @@ const TimeInput = (props) => {
         size,
         onChange,
         className,
+        invalid,
     } = props;
 
     const [value, setValue] = React.useState('');
@@ -37,7 +40,7 @@ const TimeInput = (props) => {
                     ++afterColon;
                     return true;
                     // ... des dizaine de minute entre 0 et 5 -> OK
-                } else if (afterColon === 0 && /[0-5]/.exec(letter) !== null) {
+                } else if (afterColon === 0 && tensMinutes.exec(letter) !== null) {
                     ++afterColon;
                     return true;
                 }
@@ -47,25 +50,27 @@ const TimeInput = (props) => {
 
         if (value.split('').every(validateLetter)) {
             setValue(value);
-        }
-
-        if (onChange) {
-            onChange(e);
+            if (onChange) {
+                onChange(e);
+            }
         }
     }, [onChange]);
 
     return (
-        <Form.Group>
+        <Form.Group className={className}>
             <Form.Label>{label}</Form.Label>
             <Form.Control
-                placeholder="00:00"
+                placeholder="HH:MM"
                 name={name}
                 size={size}
                 type="text"
                 value={value}
                 onChange={handleChange}
-                className={className}
+                isInvalid={invalid}
             />
+            <Form.Control.Feedback type="invalid">
+                Veuillez entrer une valeur de la forme HH:MM.
+            </Form.Control.Feedback>
         </Form.Group>
     );
 };
@@ -76,6 +81,7 @@ TimeInput.propTypes = {
     size: PropTypes.oneOf(['lg', 'sm']),
     onChange: PropTypes.func,
     className: PropTypes.string,
+    invalid: PropTypes.bool,
 };
 
 export default TimeInput;

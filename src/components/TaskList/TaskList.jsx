@@ -31,7 +31,9 @@ const TaskList = ({ id_yard, state }) => {
                 <Badge className="mb-2 text-wrap" bg="light" text="secondary">
                     Début prévu : {date.long(task.start_planned_date)}
                 </Badge>
-                <Card.Text className="lh-1 text-muted"><small>{task.description}</small></Card.Text>
+                <Card.Text className="lh-1 text-muted">
+                    <small dangerouslySetInnerHTML={{ __html: task.description }} />
+                </Card.Text>
             </Card.Body>
         </Card>
     ));

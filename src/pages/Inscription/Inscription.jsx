@@ -9,6 +9,7 @@ import sha512 from 'crypto-js/sha512';
 import { request, theme } from '../../utils';
 
 const Inscription = () => {
+
     const history = useHistory();
     const [loading, setLoading] = React.useState(false);
 
@@ -39,16 +40,25 @@ const Inscription = () => {
                 </Card.Header>
                 <Card.Body as={Form} onSubmit={handleSubmit}>
                     <FloatingLabel label="Qui êtes vous ?">
-                        <Form.Select required name="type" size="lg" className="mb-3">
+                        <Form.Select
+                            required
+                            id="type"
+                            name="type"
+                            size="lg"
+                            className="mb-3"
+                        >
                             <option value="project_owner">Client</option>
                             <option value="enterprise">Entreprise</option>
                         </Form.Select>
+                    </FloatingLabel>
+                    <FloatingLabel label="SIRET" className="mb-3">
+                        <Form.Control name="siret" placeholder="SIRET" size="lg" type="text" />
                     </FloatingLabel>
                     <FloatingLabel label="Nom/Titre" className="mb-3">
                         <Form.Control required name="name" placeholder="Nom/Titre" size="lg" type="text" />
                     </FloatingLabel>
                     <FloatingLabel label="Téléphone" className="mb-3">
-                        <Form.Control required name="phone" placeholder="Téléphone" size="lg" type="phone" />
+                        <Form.Control required name="phone" placeholder="Téléphone" size="lg" type="tel" />
                     </FloatingLabel>
                     <FloatingLabel label="E-mail" className="mb-3">
                         <OverlayTrigger
@@ -65,7 +75,7 @@ const Inscription = () => {
                             />
                         </OverlayTrigger>
                     </FloatingLabel>
-                    <Stack direction="horizontal" gap={3} className="mb-5">
+                    <Stack direction="horizontal" gap={3}>
                         <FloatingLabel label="Mot de passe" className="mb-3">
                             <Form.Control
                                 required
@@ -90,14 +100,8 @@ const Inscription = () => {
                             variant="success"
                             loading={loading}
                             type="submit"
-                            className="mx-10 px-5 position-absolute bottom-0 start-0 m-3"
+                            className="mx-auto px-5"
                             children="S'inscrire"
-                        />
-                        <Button
-                            variant="danger"
-                            type="submit"
-                            className="mx-10 px-5 position-absolute bottom-0 end-0 m-3"
-                            children="Annuler"
                         />
                         <Button
                             as={Link}
@@ -106,7 +110,7 @@ const Inscription = () => {
                             type="button"
                             variant="outline-secondary"
                             size="sm"
-                            className="mx-auto px-5 position-absolute bottom-0 start-50 translate-middle-x m-3"
+                            className="mx-auto px-5"
                             children="Se connecter"
                         />
                     </Stack>

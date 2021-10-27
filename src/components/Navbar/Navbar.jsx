@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, useRouteMatch } from 'react-router-dom';
 
-import { Nav, Navbar as BsNavbar } from 'react-bootstrap';
-import { PersonSquare } from 'react-bootstrap-icons';
+import { Nav, Navbar as BsNavbar, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { BoxArrowRight } from 'react-bootstrap-icons';
 
 import NotificationPopover from './NotificationPopover';
 
-import { theme } from '../../utils';
+import { request, theme, userType } from '../../utils';
 
 import logo from '../../assets/logo_light.png';
 
@@ -19,6 +19,10 @@ const Navbar = ({ user }) => {
     const employes = useRouteMatch('/employes');
     const dispos = useRouteMatch('/disponibilites');
 
+    const handleLogout = React.useCallback(() => {
+        request.get('/api/logout').then(() => {window.location = '/connexion';});
+    }, []);
+
     return (
         <BsNavbar sticky="top" className="mb-3" bg="dark" variant="dark" expand="md">
             <BsNavbar.Brand as={Link} to="/chantiers">
@@ -28,15 +32,28 @@ const Navbar = ({ user }) => {
             <BsNavbar.Collapse>
                 <Nav className="me-auto">
                     <Nav.Link as={Link} active={chantiers} to="/chantiers">Chantiers</Nav.Link>
-                    {type === 'enterprise' && <Nav.Link as={Link} active={employes} to="/employes">Employés</Nav.Link>}
                     {type === 'enterprise' && (
-                        <Nav.Link as={Link} active={dispos} to="/disponibilites">Disponibilités</Nav.Link>
+                        <>
+                            <Nav.Link as={Link} active={employes} to="/employes">Employés</Nav.Link>
+                            <Nav.Link as={Link} active={dispos} to="/disponibilites">Disponibilités</Nav.Link>
+                        </>
                     )}
                 </Nav>
                 <Nav>
                     <NotificationPopover />
                     <Nav.Link as={Link} active={profil} to="/profil">{name}</Nav.Link>
-                    <Nav.Link as="div"><PersonSquare color={theme.secondaryDark} size={30} /></Nav.Link>
+                    <Nav.Link as="div">
+                        {type && React.createElement(userType.icons[type], { size: 30, color: theme.secondaryDark })}
+                    </Nav.Link>
+                    <OverlayTrigger
+                        trigger="hover"
+                        overlay={<Tooltip>Se déconnecter</Tooltip>}
+                        placement="bottom"
+                    >
+                        <Nav.Link onClick={handleLogout}>
+                            <BoxArrowRight color={theme.secondaryDark} size={30} />
+                        </Nav.Link>
+                    </OverlayTrigger>
                 </Nav>
             </BsNavbar.Collapse>
         </BsNavbar>

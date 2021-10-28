@@ -46,7 +46,7 @@ const Navbar = ({ user }) => {
                         {type && React.createElement(userType.icons[type], { size: 30, color: theme.secondaryDark })}
                     </Nav.Link>
                     <OverlayTrigger
-                        trigger="hover"
+                        trigger={['hover', 'focus']}
                         overlay={<Tooltip>Se déconnecter</Tooltip>}
                         placement="bottom"
                     >

@@ -63,7 +63,7 @@ const App = () => {
                 render={({ match: { params: { id_yard } } }) => (
                     <>
                         {navbarRender}
-                        <Kanban id_yard={Number(id_yard)} />
+                        <Kanban id_yard={Number(id_yard)} user={user} />
                     </>
                 )}
             />

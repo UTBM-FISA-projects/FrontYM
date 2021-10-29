@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { PlusLg } from 'react-bootstrap-icons';
 
 import { TaskList } from '../../components/TaskList';
 import ModalNewTask from './ModalNewTask';
 
-import { theme } from '../../utils';
-import { PlusLg } from 'react-bootstrap-icons';
+import { theme, userShape } from '../../utils';
 
 const colors = {
     secondaryBlue: '#3399ff',
@@ -17,7 +17,12 @@ const colors = {
     transparentYellow: '#fbf99d',
 };
 
-const Kanban = ({ id_yard }) => {
+const Kanban = (props) => {
+    const {
+        id_yard,
+        user: { type } = {},
+    } = props;
+
     const [show, setShow] = useState(false);
     const handleClose = React.useCallback(() => {setShow(false);}, []);
     const handleShow = React.useCallback(() => {setShow(true);}, []);
@@ -37,7 +42,7 @@ const Kanban = ({ id_yard }) => {
                             }}
                         >
                             À faire{' '}
-                            <Button onClick={handleShow} size="sm"><PlusLg /></Button>
+                            {type === 'supervisor' && <Button onClick={handleShow} size="sm"><PlusLg /></Button>}
                         </Card.Header>
                         <Card.Body className="overflow-auto">
                             <TaskList id_yard={id_yard} state="todo" />
@@ -88,6 +93,7 @@ const Kanban = ({ id_yard }) => {
 
 Kanban.propTypes = {
     id_yard: PropTypes.number.isRequired,
+    user: PropTypes.shape(userShape),
 };
 
 export default Kanban;

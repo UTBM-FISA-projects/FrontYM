@@ -19,6 +19,7 @@ const NouveauChantier = () => {
         name: '',
         description: null,
         deadline: '',
+        proposals: [],
     });
 
     const handleChange = React.useCallback(({ target: { name, value } }) => {
@@ -35,9 +36,19 @@ const NouveauChantier = () => {
         }));
     }, []);
 
+    const handleProposalsChange = React.useCallback((proposals) => {
+        setData(prevState => ({ ...prevState, proposals }));
+        setShow(false);
+    }, []);
+
     const handleSubmit = React.useCallback(() => {
         if (data.deadline === '') {
             data.deadline = null;
+        }
+
+        if (data.proposals.length === 0) {
+            // TODO: popup d'erreur
+            return;
         }
 
         request.post('/api/yards', data).then(({ id_yard }) => {
@@ -87,8 +98,18 @@ const NouveauChantier = () => {
                         <Col>
                             <Card className="mb-4">
                                 <Card.Body className="text-center">
-                                    <PlusSquare size="4em" className="my-2" onClick={() => {setShow(true);}} />
-                                    <ModalEnterprises show={show} onClose={handleClose} />
+                                    <PlusSquare
+                                        size="4em"
+                                        className="my-2"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => {setShow(true);}}
+                                    />
+                                    <ModalEnterprises
+                                        show={show}
+                                        selected={data.proposals}
+                                        onClose={handleClose}
+                                        onAdd={handleProposalsChange}
+                                    />
                                 </Card.Body>
                             </Card>
                         </Col>

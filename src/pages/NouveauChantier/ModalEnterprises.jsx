@@ -7,7 +7,7 @@ import { CardEntreprise } from '../../components';
 
 import { request } from '../../utils';
 
-const ModalEnterprises = ({ show, onClose }) => {
+const ModalEnterprises = ({ show, onClose, onAdd, selected }) => {
     const [enterprises, setEnterprises] = React.useState([]);
     const [search, setSearch] = React.useState('');
 
@@ -18,6 +18,26 @@ const ModalEnterprises = ({ show, onClose }) => {
     const handleSearchChange = React.useCallback(({ target: { value } }) => {
         setSearch(value);
     }, []);
+
+    const handleClose = React.useCallback(() => {
+        setEnterprises(prevState => (
+            prevState.map((ent) => {
+                if (selected.includes(ent.id_user)) {
+                    return { ...ent, selected: true };
+                }
+                return { ...ent, selected: false };
+            })
+        ));
+        onClose();
+    }, [onClose, selected]);
+
+    const handleAdd = React.useCallback(() => {
+        onAdd(
+            enterprises
+                .filter((ent) => ent.selected)
+                .map((ent) => ent.id_user),
+        );
+    }, [enterprises, onAdd]);
 
     const toggleSelected = React.useCallback((id_selected) => {
         // On inverse la propriété selected de l'élément concerné
@@ -32,11 +52,12 @@ const ModalEnterprises = ({ show, onClose }) => {
     }, []);
 
     return (
-        <Modal size="xl" show={show} onHide={onClose}>
+        <Modal size="xl" show={show} onHide={handleClose}>
             <Modal.Body className="mx-5">
                 <Form.Control
                     placeholder="Rechercher"
                     type="search"
+                    value={search}
                     className="mb-4 text-center"
                     onChange={handleSearchChange}
                 />
@@ -48,8 +69,8 @@ const ModalEnterprises = ({ show, onClose }) => {
                     ))}
                 </Row>
                 <div className="d-flex justify-content-end">
-                    <Button variant="danger" onClick={onClose} className="me-3">Annuler</Button>
-                    <Button variant="success">Ajouter</Button>
+                    <Button variant="danger" onClick={handleClose} className="me-3">Annuler</Button>
+                    <Button variant="success" onClick={handleAdd}>Ajouter</Button>
                 </div>
             </Modal.Body>
         </Modal>
@@ -59,11 +80,15 @@ const ModalEnterprises = ({ show, onClose }) => {
 ModalEnterprises.propTypes = {
     show: PropTypes.bool,
     onClose: PropTypes.func,
+    onAdd: PropTypes.func,
+    selected: PropTypes.arrayOf(PropTypes.number),
 };
 
 ModalEnterprises.defaultProps = {
     show: false,
     onClose: null,
+    onAdd: null,
+    selected: [],
 };
 
 export default ModalEnterprises;

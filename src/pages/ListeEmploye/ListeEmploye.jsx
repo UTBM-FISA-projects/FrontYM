@@ -47,11 +47,14 @@ const ListeEmploye = ({ idUser }) => {
                         </tr>
                         </thead>
                         <tbody>
-                        {users.map(({ name, phone, email, description }) => (
-                            <Employee name={name}
-                                      email={email}
-                                      phone={phone}
-                                      description={description} />
+                        {users.map(({ id_user, name, phone, email, description }) => (
+                            <Employee
+                                key={id_user}
+                                name={name}
+                                email={email}
+                                phone={phone}
+                                description={description}
+                            />
                         ))}
                         </tbody>
                     </Table>

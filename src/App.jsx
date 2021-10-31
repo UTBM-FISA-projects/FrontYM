@@ -39,7 +39,7 @@ const App = () => {
         <Switch>
             <Route path="/chantiers" exact>
                 {navbarRender}
-                <DashboardChantier idUser={user.id_user} />
+                <DashboardChantier user={user} />
             </Route>
             <Route path="/disponibilites" exact>
                 {navbarRender}
@@ -63,7 +63,7 @@ const App = () => {
                 render={({ match: { params: { id_yard } } }) => (
                     <>
                         {navbarRender}
-                        <Kanban id_yard={Number(id_yard)} />
+                        <Kanban id_yard={Number(id_yard)} user={user} />
                     </>
                 )}
             />

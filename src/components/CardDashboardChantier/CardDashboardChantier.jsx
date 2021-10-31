@@ -3,27 +3,29 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { Badge, Card, Col, ProgressBar, Row } from 'react-bootstrap';
+import { EyeFill } from 'react-bootstrap-icons';
 
 import { TaskList } from '../TaskList';
 import { EstimatedTime } from '../EstimatedTime';
 import OptionsOverlay from './OptionsOverlay';
 
 import { isValidId, request, theme, yardShape } from '../../utils';
-import { EyeFill } from 'react-bootstrap-icons';
 
 const CardDashboardChantier = ({ userTypes, yard, onDelete, onArchive }) => {
     const {
         id_yard,
         name,
-        supervisor: {
-            name: supervisorName,
-            id_enterprise,
-        },
+        supervisor,
         done_tasks,
         total_tasks,
         total_estimated_time,
         total_time_spent,
-    } = yard;
+    } = yard || {};
+
+    const {
+        name: supervisorName,
+        id_enterprise,
+    } = supervisor || {};
 
     const [enterprise, setEnterprise] = React.useState({});
 

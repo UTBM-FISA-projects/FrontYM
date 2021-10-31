@@ -1,24 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 import { Card, Container, Stack } from 'react-bootstrap';
-import { PlusSquare } from 'react-bootstrap-icons';
 
 import { CardDashboardChantier } from '../../components';
 
-import { isValidId, request, theme } from '../../utils';
+import { isValidId, request, theme, userShape } from '../../utils';
+import { Link } from 'react-router-dom';
+import { PlusSquare } from 'react-bootstrap-icons';
 
-const DashboardChantier = ({ idUser }) => {
+const DashboardChantier = ({ user: { id_user, type } }) => {
     const [yards, setYards] = React.useState([]);
 
     React.useEffect(() => {
-        if (isValidId(idUser)) {
-            request.get(`/api/users/${idUser}/yards`).then(r => {
+        if (isValidId(id_user)) {
+            request.get(`/api/users/${id_user}/yards`).then(r => {
                 setYards(r.data);
             });
         }
-    }, [idUser]);
+    }, [id_user]);
 
     const handleDelete = React.useCallback((id_yard) => {
         request.delete(`/api/yards/${id_yard}`).then(() => {
@@ -45,13 +45,15 @@ const DashboardChantier = ({ idUser }) => {
                         </h1>
                     </Card.Body>
                 </Card>
-                <Card>
-                    <Card.Body>
-                        <Link to="/chantiers/nouveau">
-                            <PlusSquare size="4em" />
-                        </Link>
-                    </Card.Body>
-                </Card>
+                {type === 'project_owner' && (
+                    <Card>
+                        <Card.Body>
+                            <Link to="/chantiers/nouveau">
+                                <PlusSquare size="4em" />
+                            </Link>
+                        </Card.Body>
+                    </Card>
+                )}
                 {yards.map((yard) => (
                     <CardDashboardChantier
                         key={yard.id_yard}
@@ -66,8 +68,8 @@ const DashboardChantier = ({ idUser }) => {
 };
 
 DashboardChantier.propTypes = {
-    /** ID de l'utilisateur connecté */
-    idUser: PropTypes.number.isRequired,
+    /** Utilisateur connecté */
+    user: PropTypes.shape(userShape).isRequired,
 };
 
 export default DashboardChantier;

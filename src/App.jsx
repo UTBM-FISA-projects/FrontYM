@@ -39,7 +39,7 @@ const App = () => {
         <Switch>
             <Route path="/chantiers" exact>
                 {navbarRender}
-                <DashboardChantier idUser={user.id_user} />
+                <DashboardChantier user={user} />
             </Route>
             <Route path="/disponibilites" exact>
                 {navbarRender}

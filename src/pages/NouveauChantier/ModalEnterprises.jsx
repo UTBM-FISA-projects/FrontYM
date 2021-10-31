@@ -5,10 +5,18 @@ import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 
 import { CardEntreprise } from '../../components';
 
-import { request } from '../../utils';
+import { request, userShape } from '../../utils';
 
-const ModalEnterprises = ({ show, onClose, onAdd, selected }) => {
+const ModalEnterprises = (props) => {
+    const {
+        show,
+        onClose,
+        onValidate,
+        selected: selectedProps,
+    } = props;
+
     const [enterprises, setEnterprises] = React.useState([]);
+    const [selected, setSelected] = React.useState([]); // Liste d'entreprises
     const [search, setSearch] = React.useState('');
 
     React.useEffect(() => {
@@ -20,35 +28,28 @@ const ModalEnterprises = ({ show, onClose, onAdd, selected }) => {
     }, []);
 
     const handleClose = React.useCallback(() => {
-        setEnterprises(prevState => (
-            prevState.map((ent) => {
-                if (selected.includes(ent.id_user)) {
-                    return { ...ent, selected: true };
-                }
-                return { ...ent, selected: false };
-            })
-        ));
-        onClose();
-    }, [onClose, selected]);
+        setSelected(selectedProps);
+        if (onClose) {
+            onClose();
+        }
+    }, [onClose, selectedProps]);
 
-    const handleAdd = React.useCallback(() => {
-        onAdd(
-            enterprises
-                .filter((ent) => ent.selected)
-                .map((ent) => ent.id_user),
-        );
-    }, [enterprises, onAdd]);
+    const handleValidate = React.useCallback(() => {
+        if (onValidate) {
+            onValidate(selected);
+        }
+    }, [onValidate, selected]);
 
-    const toggleSelected = React.useCallback((id_selected) => {
-        // On inverse la propriété selected de l'élément concerné
-        setEnterprises(prevState => (
-            prevState.map((item) => {
-                if (item.id_user === id_selected) {
-                    return { ...item, selected: !item.selected };
-                }
-                return item;
-            })
-        ));
+    const toggleSelected = React.useCallback((ent) => {
+        setSelected(prevState => {
+            // si l'élément existe ...
+            if (prevState.find(({ id_user }) => id_user === ent.id_user) !== undefined) {
+                // ... on le supprime ...
+                return prevState.filter((item) => item.id_user !== ent.id_user);
+            }
+            // ... sinon on l'ajoute
+            return prevState.concat([ent]);
+        });
     }, []);
 
     return (
@@ -63,14 +64,17 @@ const ModalEnterprises = ({ show, onClose, onAdd, selected }) => {
                 />
                 <Row md={2} className="mx-5">
                     {enterprises.map((ent) => (
-                        <Col key={ent.id_user} className="mb-4" onClick={() => {toggleSelected(ent.id_user);}}>
-                            <CardEntreprise enterprise={ent} selected={ent.selected} />
+                        <Col key={ent.id_user} className="mb-4" onClick={() => {toggleSelected(ent);}}>
+                            <CardEntreprise
+                                enterprise={ent}
+                                selected={selected.find(({ id_user }) => id_user === ent.id_user) !== undefined}
+                            />
                         </Col>
                     ))}
                 </Row>
                 <div className="d-flex justify-content-end">
                     <Button variant="danger" onClick={handleClose} className="me-3">Annuler</Button>
-                    <Button variant="success" onClick={handleAdd}>Ajouter</Button>
+                    <Button variant="success" onClick={handleValidate}>Ajouter</Button>
                 </div>
             </Modal.Body>
         </Modal>
@@ -80,14 +84,14 @@ const ModalEnterprises = ({ show, onClose, onAdd, selected }) => {
 ModalEnterprises.propTypes = {
     show: PropTypes.bool,
     onClose: PropTypes.func,
-    onAdd: PropTypes.func,
-    selected: PropTypes.arrayOf(PropTypes.number),
+    onValidate: PropTypes.func,
+    selected: PropTypes.arrayOf(PropTypes.shape(userShape)),
 };
 
 ModalEnterprises.defaultProps = {
     show: false,
     onClose: null,
-    onAdd: null,
+    onValidate: null,
     selected: [],
 };
 

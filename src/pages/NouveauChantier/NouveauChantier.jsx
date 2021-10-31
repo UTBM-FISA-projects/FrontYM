@@ -9,11 +9,15 @@ import ModalEnterprises from './ModalEnterprises';
 
 import { isValidId, request, theme } from '../../utils';
 import 'react-quill/dist/quill.snow.css';
+import { CardEntreprise } from '../../components';
 
 const NouveauChantier = () => {
-    const history = useHistory();
     const [show, setShow] = React.useState(false);
-    const handleClose = React.useCallback(() => {setShow(false);}, []);
+    const [errors, setErrors] = React.useState({
+        name: false,
+        deadline: false,
+        proposals: false,
+    });
 
     const [data, setData] = React.useState({
         name: '',
@@ -21,6 +25,9 @@ const NouveauChantier = () => {
         deadline: '',
         proposals: [],
     });
+
+    const history = useHistory();
+    const handleClose = React.useCallback(() => {setShow(false);}, []);
 
     const handleChange = React.useCallback(({ target: { name, value } }) => {
         setData(prevState => ({
@@ -42,16 +49,28 @@ const NouveauChantier = () => {
     }, []);
 
     const handleSubmit = React.useCallback(() => {
-        if (data.deadline === '') {
-            data.deadline = null;
-        }
+        const date = new Date(data.deadline);
 
-        if (data.proposals.length === 0) {
-            // TODO: popup d'erreur
+        const nameError = data.name.length === 0;
+        const deadlineError = date <= new Date();
+        const proposalsErrors = data.proposals.length === 0;
+
+        setErrors(prev => ({
+            ...prev,
+            name: nameError,
+            deadline: deadlineError,
+            proposals: proposalsErrors,
+        }));
+
+        if (nameError || deadlineError || proposalsErrors) {
             return;
         }
 
-        request.post('/api/yards', data).then(({ id_yard }) => {
+        const sendingData = { ...data };
+        sendingData.proposals = data.proposals.map(({ id_user }) => id_user);
+        sendingData.deadline = data.deadline === '' ? null : data.deadline;
+
+        request.post('/api/yards', sendingData).then(({ id_yard }) => {
             if (isValidId(id_yard)) {
                 history.push(`/chantiers/${id_yard}`);
             }
@@ -60,7 +79,7 @@ const NouveauChantier = () => {
 
     return (
         <Container>
-            <Card>
+            <Card className="mb-5" style={{ boxShadow: `0 0 12px ${theme.secondaryDark}` }}>
                 <Card.Body>
                     <Card.Title as="h2" style={{ color: theme.primaryDark }} className="mb-4">
                         <strong>Nouveau chantier</strong>
@@ -74,7 +93,9 @@ const NouveauChantier = () => {
                             placeholder="Nom du chantier"
                             size="lg"
                             type="text"
+                            isInvalid={errors.name}
                         />
+                        <Form.Control.Feedback type="invalid">Le nom est obligatoire</Form.Control.Feedback>
                     </FloatingLabel>
                     <ReactQuill
                         theme="snow"
@@ -82,25 +103,32 @@ const NouveauChantier = () => {
                         onChange={handleQuillChange}
                         value={data.description}
                     />
-                    <FloatingLabel label="date de fin" className="mb-4">
+                    <FloatingLabel label="Date de fin" className="mb-4">
                         <Form.Control
                             required
-                            placeholder="date de fin"
+                            placeholder="Date de fin"
                             onChange={handleChange}
                             value={data.deadline}
                             name="deadline"
                             size="lg"
                             type="date"
+                            isInvalid={errors.deadline}
                         />
+                        <Form.Control.Feedback type="invalid">
+                            La date de fin doit être après aujourd'hui.
+                        </Form.Control.Feedback>
                     </FloatingLabel>
-                    <Card.Subtitle as="h4" className="mb-4">Entreprises</Card.Subtitle>
-                    <Row sm={4}>
-                        <Col>
-                            <Card className="mb-4">
-                                <Card.Body className="text-center">
+                    <Card.Subtitle as="h4" className="mb-4 mt-3">Entreprises</Card.Subtitle>
+                    {errors.proposals && (
+                        <p className="text-danger">Au moins une entreprise doit être sélectionnée !</p>
+                    )}
+                    <Row sm={2} className="mx-5 my-2">
+                        <Col className="mb-4">
+                            <Card style={{ height: '100%' }}>
+                                <Card.Body className="d-flex align-items-center justify-content-center">
                                     <PlusSquare
                                         size="4em"
-                                        className="my-2"
+                                        className="my-3"
                                         style={{ cursor: 'pointer' }}
                                         onClick={() => {setShow(true);}}
                                     />
@@ -108,11 +136,16 @@ const NouveauChantier = () => {
                                         show={show}
                                         selected={data.proposals}
                                         onClose={handleClose}
-                                        onAdd={handleProposalsChange}
+                                        onValidate={handleProposalsChange}
                                     />
                                 </Card.Body>
                             </Card>
                         </Col>
+                        {data.proposals.map((ent) => (
+                            <Col key={ent.id_user} className="mb-4">
+                                <CardEntreprise enterprise={ent} />
+                            </Col>
+                        ))}
                     </Row>
                     <div className="d-flex justify-content-end">
                         <Button as={Link} to="/chantiers" variant="danger" className="me-3" children="Annuler" />

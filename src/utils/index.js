@@ -12,3 +12,4 @@ export { default as date } from './date';
 export { default as isValidId } from './isValidId';
 export { default as request } from './request';
 export { default as typeCheck } from './typeCheck';
+export { default as notification } from './notification';

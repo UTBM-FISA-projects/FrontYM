@@ -22,6 +22,7 @@ const Profil = ({ user: userProps }) => {
         email,
         phone,
         id_enterprise,
+        siret,
     } = user;
 
     React.useEffect(() => {
@@ -74,6 +75,7 @@ const Profil = ({ user: userProps }) => {
                             <h2><Form.Control plaintext value={name} name="name" onChange={handleChange} /></h2>
                             <div className="text-muted">{userType.names[type]}</div>
                             {type === 'supervisor' && <div>Entreprise d'appartenance : {enterprise.name}</div>}
+                            {siret && <div>SIRET : {siret}</div>}
                         </Col>
                     </Row>
                     <Form.Label as="h3" className="mb-3" style={{ color: theme.primaryDark }}>Description</Form.Label>

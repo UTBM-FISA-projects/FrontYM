@@ -15,7 +15,7 @@ const Inscription = () => {
 
     const handleSubmit = React.useCallback((e) => {
         e.preventDefault();
-        setLoading(true);
+        //setLoading(true);
         const data = new FormData(e.target);
 
         data.set('password', sha512(data.get('password')));
@@ -23,7 +23,7 @@ const Inscription = () => {
 
         request.post('/api/users', data).then(() => {
             // TODO gérer les erreurs
-            history.push('/connexion');
+            //history.push('/connexion');
             setLoading(false);
         });
     }, [history]);

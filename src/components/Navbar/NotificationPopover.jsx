@@ -14,12 +14,12 @@ const NotificationPopover = () => {
 
     return (
         <OverlayTrigger
-            trigger="click"
+            trigger="focus"
             placement="bottom"
             overlay={
-                <Popover id="popover-basic">
+                <Popover id="notification-popover">
                     <Popover.Header as="h3">Notifications</Popover.Header>
-                    <Popover.Body>
+                    <Popover.Body style={{ maxHeight: '80vh', overflowY: 'scroll' }}>
                         {notifs.length === 0 ? (
                             <>
                                 <BellSlash size={30} />{' '}

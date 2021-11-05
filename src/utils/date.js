@@ -17,6 +17,21 @@ const date = {
     },
 
     /**
+     * Formate une date en abrégé format français avec l'heure (jj/mm, hh:mm).
+     * @param dateStr {string|Date} Une date
+     * @return {string}
+     */
+    shortTime: (dateStr) => {
+        const date = new Date(dateStr);
+        return date.toLocaleString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    },
+
+    /**
      * Formate une date en français (Lundi 1 janvier 1970).
      * @param dateStr {string|Date} Une date
      * @returns {string}

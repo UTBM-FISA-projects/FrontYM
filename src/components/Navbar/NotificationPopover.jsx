@@ -1,26 +1,46 @@
 import React from 'react';
 
-import { Nav, OverlayTrigger, Popover } from 'react-bootstrap';
+import { ListGroup, Nav, OverlayTrigger, Popover } from 'react-bootstrap';
 import { BellFill, BellSlash } from 'react-bootstrap-icons';
 
-import { theme } from '../../utils';
+import { notification, request, theme } from '../../utils';
 
-const NotificationPopover = () => (
-    <OverlayTrigger
-        trigger="click"
-        placement="bottom"
-        overlay={
-            <Popover id="popover-basic">
-                <Popover.Header as="h3">Notifications</Popover.Header>
-                <Popover.Body>
-                    <BellSlash size={30}/>{' '}
-                    Aucune notifications
-                </Popover.Body>
-            </Popover>
-        }
-    >
-        <Nav.Link><BellFill color={theme.primaryDark} size={30} /></Nav.Link>
-    </OverlayTrigger>
-);
+const NotificationPopover = () => {
+    const [notifs, setNotifs] = React.useState([]);
+
+    React.useEffect(() => {
+        request.get('/api/users/notifications').then(r => setNotifs(r.data));
+    }, []);
+
+    return (
+        <OverlayTrigger
+            trigger="focus"
+            placement="bottom"
+            overlay={
+                <Popover id="notification-popover">
+                    <Popover.Header as="h3">Notifications</Popover.Header>
+                    <Popover.Body style={{ maxHeight: '80vh', overflowY: 'scroll' }}>
+                        {notifs.length === 0 ? (
+                            <>
+                                <BellSlash size={30} />{' '}
+                                Aucune notifications
+                            </>
+                        ) : (
+                            <ListGroup variant="flush">
+                                {notifs.map((n) => (
+                                    <ListGroup.Item key={n.id_notification}>
+                                        {notification[n.notification_type.title](n)}
+                                    </ListGroup.Item>
+                                ))}
+                            </ListGroup>
+                        )}
+                    </Popover.Body>
+                </Popover>
+            }
+        >
+            <Nav.Link><BellFill color={theme.primaryDark} size={30} /></Nav.Link>
+        </OverlayTrigger>
+    );
+};
 
 export default NotificationPopover;

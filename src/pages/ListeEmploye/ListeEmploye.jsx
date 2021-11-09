@@ -4,10 +4,18 @@ import { Card, Container, Table } from 'react-bootstrap';
 
 import { isValidId, request, theme } from '../../utils';
 import PropTypes from 'prop-types';
+import { Plus } from 'react-bootstrap-icons';
+import ModalAjoutEmploye from './ModalAjoutEmploye';
 
 const ListeEmploye = ({ idUser }) => {
 
     const [users, setUsers] = React.useState([]);
+
+    const [show, setShow] = React.useState(false);
+
+    const handleClose = React.useCallback(() => {
+        setShow(false);
+    }, []);
 
     React.useEffect(() => {
             if (isValidId(idUser)) {
@@ -56,6 +64,20 @@ const ListeEmploye = ({ idUser }) => {
                                 description={description}
                             />
                         ))}
+                        <tr>
+                            <td colSpan={5} onClick={() => {
+                                setShow(true);
+                            }}>
+                                <div className="d-flex justify-content-center">
+                                    <Plus size={40} />
+                                </div>
+                            </td>
+                            <ModalAjoutEmploye
+                                show={show}
+                                onClose={handleClose}
+                                idEnterprise={idUser}
+                            />
+                        </tr>
                         </tbody>
                     </Table>
                 </Card.Body>

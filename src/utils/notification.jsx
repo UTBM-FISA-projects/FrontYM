@@ -64,13 +64,17 @@ const notification = {
                 <Stack direction="horizontal" gap={2} className="d-flex justify-content-center">
                     <Button
                         children="Accepter"
-                        onClick={() => {console.log('valider');}}
+                        onClick={() => {
+                            request.put(`/api/yards/${parameters.yard.id_yard}/accept`, null);
+                        }}
                         variant="outline-success"
                         size="sm"
                     />
                     <Button
                         children="Décliner"
-                        onClick={() => {console.log('decliner');}}
+                        onClick={() => {
+                            request.put(`/api/yards/${parameters.yard.id_yard}/decline`, null);
+                        }}
                         variant="outline-danger"
                         size="sm"
                     />
@@ -96,6 +100,7 @@ const notification = {
         let template = notification_type.template;
 
         try {
+            template = template.replace('${supervisor}', parameters.supervisor.name);
             template = template.replace('${enterprise}', parameters.enterprise.name);
             template = template.replace('${task}', parameters.task.title);
             template = template.replace('${yard}', parameters.yard.name);
@@ -109,13 +114,14 @@ const notification = {
                 <Stack direction="horizontal" gap={2} className="d-flex justify-content-center">
                     <Button
                         children="Accepter"
-                        onClick={() => {console.log('valider');}}
+                        onClick={() => {
+                            request.put(`/api/tasks/${parameters.task.id_task}/accept`);
+                        }}
                         variant="outline-success"
                         size="sm"
                     />
                     <Button
                         children="Décliner"
-                        onClick={() => {console.log('decliner');}}
                         variant="outline-danger"
                         size="sm"
                     />

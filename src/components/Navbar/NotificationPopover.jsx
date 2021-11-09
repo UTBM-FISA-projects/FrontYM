@@ -14,7 +14,7 @@ const NotificationPopover = () => {
 
     return (
         <OverlayTrigger
-            trigger="focus"
+            trigger="click"
             placement="bottom"
             overlay={
                 <Popover id="notification-popover">

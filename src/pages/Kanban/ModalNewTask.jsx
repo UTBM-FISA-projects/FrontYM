@@ -45,9 +45,14 @@ const ModalNewTask = ({ show, onClose, id_yard }) => {
     });
 
     React.useEffect(() => {
-        // TODO: uniquement les entreprises disponibles
-        request.get('/api/users/enterprises').then(r => {setEnterprises(r.data);});
-    }, []);
+        request.get('/api/users/enterprises', {
+            start_date: data.start_planned_date ? data.start_planned_date.toJSON() : '',
+            end_date: data.end_planned_date ? data.end_planned_date.toJSON() : '',
+            hours: data.estimated_time ?? '',
+        })
+            .then(r => {setEnterprises(r.data);})
+            .catch(() => {});
+    }, [data.estimated_time, data.start_planned_date, data.end_planned_date]);
 
     const handleSubmit = React.useCallback(() => {
         if (data.estimated_time && !timeRegex.test(data.estimated_time)) {
@@ -129,7 +134,7 @@ const ModalNewTask = ({ show, onClose, id_yard }) => {
                 <Form.Select name="id_executor" className="mb-3" onChange={handleChange}>
                     <option>Aucun prestataire</option>
                     {enterprises.map((ent) => (
-                        <option value={ent.id_user}>{ent.name}</option>
+                        <option key={ent.id_user} value={ent.id_user}>{ent.name}</option>
                     ))}
                 </Form.Select>
                 <div className="d-flex justify-content-end">

@@ -20,10 +20,15 @@ const send = (method, url, body = null, params = {}) => {
         ...params,
     })
         .then(res => {
-            if (res.status === 401) {
-                window.location = '/connexion';
+            switch (res.status) {
+                case 401:
+                    window.location = '/connexion';
+                    break;
+                case 422:
+                    return Promise.reject(res);
+                default:
+                    return method === 'DELETE' ? null : res.json();
             }
-            return method === 'DELETE' ? null : res.json();
         });
 };
 
@@ -37,9 +42,16 @@ const request = {
      * Si la réponse est 401 Unauthorized, le client est redirigé vers la page de connexion.
      *
      * @param url {string}
+     * @param params {Object?}
      * @returns {Promise<Object>}
      */
-    get: (url) => send('GET', url),
+    get: (url, params) => {
+        let full_url = url;
+        if (params) {
+            full_url += '?' + (new URLSearchParams(params)).toString();
+        }
+        return send('GET', full_url);
+    },
 
     /**
      * Envoie une requête POST et retourne le JSON dans une promesse.

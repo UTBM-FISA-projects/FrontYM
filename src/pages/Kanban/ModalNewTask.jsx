@@ -31,6 +31,8 @@ function reducer(state, action) {
 const ModalNewTask = ({ show, onClose, id_yard }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    const [enterprises, setEnterprises] = React.useState([]);
+    const [errors, setErrors] = React.useState({});
     const [data, setData] = React.useState({
         title: '',
         description: null,
@@ -42,7 +44,15 @@ const ModalNewTask = ({ show, onClose, id_yard }) => {
         id_yard,
     });
 
-    const [errors, setErrors] = React.useState({});
+    React.useEffect(() => {
+        request.get('/api/users/enterprises', {
+            start_date: data.start_planned_date ? data.start_planned_date.toJSON() : '',
+            end_date: data.end_planned_date ? data.end_planned_date.toJSON() : '',
+            hours: data.estimated_time ?? '',
+        })
+            .then(r => {setEnterprises(r.data);})
+            .catch(() => {});
+    }, [data.estimated_time, data.start_planned_date, data.end_planned_date]);
 
     const handleSubmit = React.useCallback(() => {
         if (data.estimated_time && !timeRegex.test(data.estimated_time)) {
@@ -122,11 +132,10 @@ const ModalNewTask = ({ show, onClose, id_yard }) => {
                 />
                 <Card.Text className="mb-3">Entreprise assignée à la mission</Card.Text>
                 <Form.Select name="id_executor" className="mb-3" onChange={handleChange}>
-                    <option>Entreprise assignée</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                    <option value="4">Viva l'algérie !</option>
+                    <option>Aucun prestataire</option>
+                    {enterprises.map((ent) => (
+                        <option key={ent.id_user} value={ent.id_user}>{ent.name}</option>
+                    ))}
                 </Form.Select>
                 <div className="d-flex justify-content-end">
                     <Button variant="danger" onClick={onClose} className="me-3">Annuler</Button>

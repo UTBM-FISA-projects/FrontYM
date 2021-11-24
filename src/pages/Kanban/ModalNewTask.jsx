@@ -113,10 +113,8 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
         }));
     }, []);
 
-    console.log(data.start_planned_date);
-
     return (
-        <Modal show={show} onHide={onClose} backdrop="static">
+        <Modal show={show} onHide={onClose}>
             <Modal.Body>
                 <h2 style={{ color: theme.primaryDark }} className="mb-4">
                     {task ? (
@@ -180,6 +178,14 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                     startDate={data.start_planned_date}
                     endDate={data.end_planned_date}
                     focusedInput={state.focusedInput}
+                    placement="top"
+                />
+                <TimeInput
+                    label="Temps passé"
+                    name="time_spent"
+                    onChange={handleChange}
+                    invalid={errors.time_spent}
+                    value={data.time_spent}
                 />
                 <TimeInput
                     label="Temps estimé"
@@ -187,6 +193,7 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                     name="estimated_time"
                     onChange={handleChange}
                     invalid={errors.estimated_time}
+                    value={data.estimated_time}
                 />
                 <hr style={{ color: theme.primary, height: 3 }} />
                 <label>Entreprise assignée à la mission</label>

@@ -11,7 +11,7 @@ import OptionsOverlay from './OptionsOverlay';
 
 import { isValidId, request, theme, yardShape } from '../../utils';
 
-const CardDashboardChantier = ({ userTypes, yard, onDelete, onArchive }) => {
+const CardDashboardChantier = ({ userType, yard, onDelete, onArchive }) => {
     const {
         id_yard,
         name,
@@ -44,11 +44,11 @@ const CardDashboardChantier = ({ userTypes, yard, onDelete, onArchive }) => {
                     <Col style={{ borderRight: '1px #c2c2c2 solid' }}>
                         <Link to={`/chantiers/${id_yard}`} style={{ color: theme.primaryDark }}>
                             <h3>
-                                {userTypes === 'prestataire' && 'Prestation sur '}{name}
+                                {userType === 'prestataire' && 'Prestation sur '}{name}
                                 {' '}<EyeFill size="0.8em" />
                             </h3>
                         </Link>
-                        {userTypes !== 'prestataire' && (
+                        {userType !== 'prestataire' && (
                             <div className="mt-4">
                                 <h4>Progression générale</h4>
                                 <div>Progression du chantier</div>
@@ -56,7 +56,7 @@ const CardDashboardChantier = ({ userTypes, yard, onDelete, onArchive }) => {
                                 <EstimatedTime spentTime={total_time_spent} estimatedTime={total_estimated_time} />
                             </div>
                         )}
-                        {userTypes === 'prestataire' && (
+                        {userType === 'prestataire' && (
                             <div className="mt-4">
                                 <h4>Prochaine intervention</h4>
                                 <Badge bg="light" text="dark" className="mt-3">Mercredi 27 octobre 2021 à 13h</Badge>
@@ -73,16 +73,18 @@ const CardDashboardChantier = ({ userTypes, yard, onDelete, onArchive }) => {
                         <TaskList id_yard={id_yard} />
                     </Col>
                 </Row>
-                <div style={{ top: '2%', right: '0.5%', position: 'absolute' }}>
-                    <OptionsOverlay id_yard={id_yard} onDelete={onDelete} onArchive={onArchive} />
-                </div>
+                {userType === 'project_owner' && (
+                    <div style={{ top: '2%', right: '0.5%', position: 'absolute' }}>
+                        <OptionsOverlay id_yard={id_yard} onDelete={onDelete} onArchive={onArchive} />
+                    </div>
+                )}
             </Card.Body>
         </Card>
     );
 };
 
 CardDashboardChantier.propTypes = {
-    userTypes: PropTypes.string,
+    userType: PropTypes.oneOf(['project_owner', 'enterprise', 'supervisor']).isRequired,
     yard: PropTypes.shape(yardShape).isRequired,
     onDelete: PropTypes.func,
     onArchive: PropTypes.func,

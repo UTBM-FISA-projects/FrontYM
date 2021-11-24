@@ -62,6 +62,7 @@ const DashboardChantier = ({ user: { id_user, type } }) => {
                 {yards.map((yard) => (
                     <CardDashboardChantier
                         key={yard.id_yard}
+                        userType={type}
                         yard={yard}
                         onDelete={handleDelete}
                         onArchive={handleArchive}

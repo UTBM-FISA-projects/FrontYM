@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 
-import { CardEntreprise } from '../../components';
+import { CardEntreprise, Pagination } from '../../components';
 
 import { request, userShape } from '../../utils';
 
@@ -19,9 +19,16 @@ const ModalEnterprises = (props) => {
     const [selected, setSelected] = React.useState([]); // Liste d'entreprises
     const [search, setSearch] = React.useState('');
 
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [lastPage, setLastPage] = React.useState(1);
+
     React.useEffect(() => {
-        request.get(`/api/users/enterprises?q=${search}`).then(r => {setEnterprises(r.data);});
-    }, [search]);
+        request.get(`/api/users/enterprises`, { q: search, page: currentPage }).then(r => {
+            setEnterprises(r.data);
+            setCurrentPage(r.current_page);
+            setLastPage(r.last_page);
+        });
+    }, [currentPage, search]);
 
     const handleSearchChange = React.useCallback(({ target: { value } }) => {
         setSearch(value);
@@ -72,6 +79,7 @@ const ModalEnterprises = (props) => {
                         </Col>
                     ))}
                 </Row>
+                <Pagination currentPage={currentPage} lastPage={lastPage} onPageChange={setCurrentPage} />
                 <div className="d-flex justify-content-end">
                     <Button variant="danger" onClick={handleClose} className="me-3">Annuler</Button>
                     <Button variant="success" onClick={handleValidate}>Ajouter</Button>

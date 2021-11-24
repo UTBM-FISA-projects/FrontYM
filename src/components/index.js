@@ -3,3 +3,4 @@ export { CardDashboardChantier } from './CardDashboardChantier';
 export { Button } from './Button';
 export { CardEntreprise } from './CardEntreprise';
 export { TimeInput } from './TimeInput';
+export { Pagination } from './Pagination';

@@ -17,6 +17,13 @@ const Pagination = ({ currentPage, lastPage, onPageChange }) => {
                 ‹
             </BsPagination.Item>
 
+            {currentPage > 3 && (
+                <>
+                    <BsPagination.Item children={1} to={1} onClick={handlePageChange} />
+                    <BsPagination.Ellipsis />
+                </>
+            )}
+
             {currentPage - 2 >= 1 && (
                 <BsPagination.Item children={currentPage - 2} to={currentPage - 2} onClick={handlePageChange} />
             )}
@@ -29,6 +36,13 @@ const Pagination = ({ currentPage, lastPage, onPageChange }) => {
             )}
             {currentPage + 2 <= lastPage && (
                 <BsPagination.Item children={currentPage + 2} to={currentPage + 2} onClick={handlePageChange} />
+            )}
+
+            {currentPage < lastPage - 2 && (
+                <>
+                    <BsPagination.Ellipsis />
+                    <BsPagination.Item children={lastPage} to={lastPage} onClick={handlePageChange} />
+                </>
             )}
 
             <BsPagination.Item

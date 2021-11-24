@@ -32,18 +32,6 @@ const ListeEmploye = ({ idUser }) => {
         [currentPage, idUser],
     );
 
-    const Employee = ({ name, email, phone, description }) => {
-        return (
-            <tr>
-                <td>{name}</td>
-                <td>{email}</td>
-                <td>{phone}</td>
-                <td>********</td>
-                <td>{description}</td>
-            </tr>
-        );
-    };
-
     return (
         <Container>
             <Card className="mb-5" style={{ boxShadow: `0 0 12px ${theme.secondaryDark}` }}>
@@ -57,19 +45,17 @@ const ListeEmploye = ({ idUser }) => {
                             <th>Nom</th>
                             <th>Email</th>
                             <th>Téléphone</th>
-                            <th>Mot de passe</th>
                             <th>Description</th>
                         </tr>
                         </thead>
                         <tbody>
                         {users.map(({ id_user, name, phone, email, description }) => (
-                            <Employee
-                                key={id_user}
-                                name={name}
-                                email={email}
-                                phone={phone}
-                                description={description}
-                            />
+                            <tr key={id_user}>
+                                <td>{name}</td>
+                                <td>{email}</td>
+                                <td>{phone}</td>
+                                <td>{description}</td>
+                            </tr>
                         ))}
                         <tr>
                             <td colSpan={5} onClick={() => {

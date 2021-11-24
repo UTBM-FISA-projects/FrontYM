@@ -16,6 +16,7 @@ const TimeInput = (props) => {
         className,
         invalid,
         value: valueProps,
+        readOnly,
     } = props;
 
     const [value, setValue] = React.useState('');
@@ -76,6 +77,7 @@ const TimeInput = (props) => {
                 value={value}
                 onChange={handleChange}
                 isInvalid={invalid}
+                readOnly={readOnly}
             />
             <Form.Control.Feedback type="invalid">
                 Veuillez entrer une valeur de la forme HH:MM.
@@ -92,6 +94,7 @@ TimeInput.propTypes = {
     className: PropTypes.string,
     invalid: PropTypes.bool,
     value: PropTypes.string,
+    readOnly: PropTypes.bool,
 };
 
 export default TimeInput;

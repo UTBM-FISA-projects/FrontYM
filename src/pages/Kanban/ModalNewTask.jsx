@@ -132,13 +132,24 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                         name="title"
                         value={data.title}
                         onChange={handleChange}
+                        readOnly={user?.type === 'project_owner'}
                     />
                 </FloatingLabel>
-                <ReactQuill className="mb-4" value={data.description} onChange={handleQuillChange} />
+                <ReactQuill
+                    readOnly={user?.type === 'project_owner'}
+                    className="mb-4"
+                    value={data.description}
+                    onChange={handleQuillChange}
+                />
                 {task && (
                     <>
                         <label>État</label>
-                        <Form.Select className="mb-4" name="state" onChange={handleChange}>
+                        <Form.Select
+                            className="mb-4"
+                            name="state"
+                            onChange={handleChange}
+                            disabled={user?.type === 'project_owner'}
+                        >
                             <option value="todo" selected={data.state === 'todo'}>À faire</option>
                             <option value="doing" selected={data.state === 'doing'}>En cours</option>
                             <option value="done" selected={data.state === 'done'}>Fait</option>
@@ -148,14 +159,14 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                             label="Mission validée par l'exécutant"
                             checked={data.executor_validated}
                             onChange={handleCheckboxChange}
-                            disabled={user.id_user !== data.id_executor}
+                            disabled={user?.id_user !== data.id_executor}
                         />
                         <Form.Switch
                             name="supervisor_validated"
                             label="Mission validée par le superviseur"
                             onChange={handleCheckboxChange}
                             checked={data.supervisor_validated}
-                            disabled={user.type !== 'supervisor'}
+                            disabled={user?.type !== 'supervisor'}
                         />
                     </>
                 )}
@@ -186,6 +197,7 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                     onChange={handleChange}
                     invalid={errors.time_spent}
                     value={data.time_spent}
+                    readOnly={user?.type === 'project_owner'}
                 />
                 <TimeInput
                     label="Temps estimé"
@@ -194,6 +206,7 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                     onChange={handleChange}
                     invalid={errors.estimated_time}
                     value={data.estimated_time}
+                    readOnly={user?.type === 'project_owner'}
                 />
                 <hr style={{ color: theme.primary, height: 3 }} />
                 <label>Entreprise assignée à la mission</label>
@@ -201,6 +214,7 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                     name="id_executor"
                     className="mb-4"
                     onChange={handleChange}
+                    disabled={user?.type === 'project_owner'}
                 >
                     <option value="null">Aucun prestataire</option>
                     {enterprises.map((ent) => (

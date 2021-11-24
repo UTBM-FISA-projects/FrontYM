@@ -66,6 +66,11 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
     }, [data.estimated_time, data.start_planned_date, data.end_planned_date]);
 
     const handleSubmit = React.useCallback(() => {
+        if (data.time_spent && !timeRegex.test(data.time_spent)) {
+            setErrors({ time_spent: true });
+            return;
+        }
+
         if (data.estimated_time && !timeRegex.test(data.estimated_time)) {
             setErrors({ estimated_time: true });
             return;
@@ -156,14 +161,14 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                         </Form.Select>
                         <Form.Switch
                             name="executor_validated"
-                            label="Mission validée par l'exécutant"
+                            label="Réalisation validée par l'exécutant"
                             checked={data.executor_validated}
                             onChange={handleCheckboxChange}
                             disabled={user?.id_user !== data.id_executor}
                         />
                         <Form.Switch
                             name="supervisor_validated"
-                            label="Mission validée par le superviseur"
+                            label="Réalisation validée par le superviseur"
                             onChange={handleCheckboxChange}
                             checked={data.supervisor_validated}
                             disabled={user?.type !== 'supervisor'}

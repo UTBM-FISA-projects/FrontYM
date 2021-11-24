@@ -70,7 +70,7 @@ const ModalChangePassword = () => {
                             onClick={() => {setShow(false);}}
                             disabled={loading}
                         />
-                        <Button children="Changer" type="submit" loading={loading} />
+                        <Button children="Changer" type="submit" variant="success" loading={loading} />
                     </Modal.Footer>
                 </Form>
             </Modal>

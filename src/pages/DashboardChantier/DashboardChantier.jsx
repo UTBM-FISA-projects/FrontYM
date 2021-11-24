@@ -9,7 +9,12 @@ import { isValidId, request, theme, userShape } from '../../utils';
 import { Link } from 'react-router-dom';
 import { PlusSquare } from 'react-bootstrap-icons';
 
-const DashboardChantier = ({ user: { id_user, type } }) => {
+const DashboardChantier = ({ user }) => {
+    const {
+        id_user,
+        type,
+    } = user;
+
     const [yards, setYards] = React.useState([]);
 
     const [currentPage, setCurrentPage] = React.useState(1);
@@ -62,7 +67,7 @@ const DashboardChantier = ({ user: { id_user, type } }) => {
                 {yards.map((yard) => (
                     <CardDashboardChantier
                         key={yard.id_yard}
-                        userType={type}
+                        user={user}
                         yard={yard}
                         onDelete={handleDelete}
                         onArchive={handleArchive}

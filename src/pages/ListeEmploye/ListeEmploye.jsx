@@ -6,12 +6,15 @@ import { isValidId, request, theme } from '../../utils';
 import PropTypes from 'prop-types';
 import { Plus } from 'react-bootstrap-icons';
 import ModalAjoutEmploye from './ModalAjoutEmploye';
+import { Pagination } from '../../components';
 
 const ListeEmploye = ({ idUser }) => {
 
     const [users, setUsers] = React.useState([]);
-
     const [show, setShow] = React.useState(false);
+
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [lastPage, setLastPage] = React.useState(1);
 
     const handleClose = React.useCallback(() => {
         setShow(false);
@@ -19,10 +22,14 @@ const ListeEmploye = ({ idUser }) => {
 
     React.useEffect(() => {
             if (isValidId(idUser)) {
-                request.get(`/api/users/${idUser}/employees`).then(r => setUsers(r.data));
+                request.get(`/api/users/${idUser}/employees`, { page: currentPage }).then(r => {
+                    setUsers(r.data);
+                    setCurrentPage(r.current_page);
+                    setLastPage(r.last_page);
+                });
             }
         },
-        [idUser],
+        [currentPage, idUser],
     );
 
     const Employee = ({ name, email, phone, description }) => {
@@ -39,7 +46,7 @@ const ListeEmploye = ({ idUser }) => {
 
     return (
         <Container>
-            <Card>
+            <Card className="mb-5" style={{ boxShadow: `0 0 12px ${theme.secondaryDark}` }}>
                 <Card.Body>
                     <Card.Title as="h2" className="text-center mb-4" style={{ color: theme.primaryDark }}>
                         <strong>Employés</strong>
@@ -80,6 +87,7 @@ const ListeEmploye = ({ idUser }) => {
                         </tr>
                         </tbody>
                     </Table>
+                    <Pagination currentPage={currentPage} lastPage={lastPage} onPageChange={setCurrentPage} />
                 </Card.Body>
             </Card>
         </Container>

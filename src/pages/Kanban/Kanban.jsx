@@ -20,7 +20,7 @@ const colors = {
 const Kanban = (props) => {
     const {
         id_yard,
-        user: { type } = {},
+        user,
     } = props;
 
     const [show, setShow] = useState(false);
@@ -42,10 +42,10 @@ const Kanban = (props) => {
                             }}
                         >
                             À faire{' '}
-                            {type === 'supervisor' && <Button onClick={handleShow} size="sm"><PlusLg /></Button>}
+                            {user.type === 'supervisor' && <Button onClick={handleShow} size="sm"><PlusLg /></Button>}
                         </Card.Header>
                         <Card.Body className="overflow-auto">
-                            <TaskList id_yard={id_yard} state="todo" />
+                            <TaskList id_yard={id_yard} state="todo" user={user} />
                             <ModalNewTask id_yard={id_yard} show={show} onClose={handleClose} />
                         </Card.Body>
                     </Card>
@@ -64,7 +64,7 @@ const Kanban = (props) => {
                             En cours
                         </Card.Header>
                         <Card.Body>
-                            <TaskList id_yard={id_yard} state="doing" />
+                            <TaskList id_yard={id_yard} state="doing" user={user} />
                         </Card.Body>
                     </Card>
                 </Col>
@@ -82,7 +82,7 @@ const Kanban = (props) => {
                             Fait
                         </Card.Header>
                         <Card.Body>
-                            <TaskList id_yard={id_yard} state="done" />
+                            <TaskList id_yard={id_yard} user={user} state="done" />
                         </Card.Body>
                     </Card>
                 </Col>

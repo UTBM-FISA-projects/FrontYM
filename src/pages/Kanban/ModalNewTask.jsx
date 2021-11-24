@@ -1,13 +1,13 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Card, FloatingLabel, Form, Modal } from 'react-bootstrap';
+import { Button, FloatingLabel, Form, Modal } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 import { DateRangeInput } from '@datepicker-react/styled';
 
 import { TimeInput } from '../../components';
 
-import { date, request, theme } from '../../utils';
+import { date, request, theme, userShape } from '../../utils';
 
 const timeRegex = new RegExp(/\d{2,}:[0-5]\d/);
 
@@ -28,7 +28,7 @@ function reducer(state, action) {
     }
 }
 
-const ModalNewTask = ({ show, onClose, id_yard }) => {
+const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const [enterprises, setEnterprises] = React.useState([]);
@@ -45,6 +45,17 @@ const ModalNewTask = ({ show, onClose, id_yard }) => {
     });
 
     React.useEffect(() => {
+        if (task) {
+            const ntask = {
+                ...task,
+                start_planned_date: task.start_planned_date ? new Date(task.start_planned_date) : null,
+                end_planned_date: task.end_planned_date ? new Date(task.end_planned_date) : null,
+            };
+            setData(ntask);
+        }
+    }, [task]);
+
+    React.useEffect(() => {
         request.get('/api/users/enterprises', {
             start_date: data.start_planned_date ? data.start_planned_date.toJSON() : '',
             end_date: data.end_planned_date ? data.end_planned_date.toJSON() : '',
@@ -55,13 +66,27 @@ const ModalNewTask = ({ show, onClose, id_yard }) => {
     }, [data.estimated_time, data.start_planned_date, data.end_planned_date]);
 
     const handleSubmit = React.useCallback(() => {
+        if (data.time_spent && !timeRegex.test(data.time_spent)) {
+            setErrors({ time_spent: true });
+            return;
+        }
+
         if (data.estimated_time && !timeRegex.test(data.estimated_time)) {
             setErrors({ estimated_time: true });
             return;
         }
 
-        request.post('/api/tasks', data).then(onClose);
-    }, [data, onClose]);
+        const ndata = data;
+        if (ndata.id_executor === 'null') {
+            ndata.id_executor = null;
+        }
+
+        if (task) {
+            request.put(`/api/tasks/${task.id_task}`, ndata).then(onClose);
+        } else {
+            request.post('/api/tasks', ndata).then(onClose);
+        }
+    }, [data, onClose, task]);
 
     const handleDateChange = React.useCallback((data) => {
         setData(prevState => ({
@@ -79,6 +104,13 @@ const ModalNewTask = ({ show, onClose, id_yard }) => {
         }));
     }, []);
 
+    const handleCheckboxChange = React.useCallback(({ target: { name, checked } }) => {
+        setData(prevState => ({
+            ...prevState,
+            [name]: checked,
+        }));
+    }, []);
+
     const handleQuillChange = React.useCallback((value) => {
         setData(prevState => ({
             ...prevState,
@@ -87,10 +119,14 @@ const ModalNewTask = ({ show, onClose, id_yard }) => {
     }, []);
 
     return (
-        <Modal show={show} onHide={onClose} backdrop="static">
+        <Modal show={show} onHide={onClose}>
             <Modal.Body>
                 <h2 style={{ color: theme.primaryDark }} className="mb-4">
-                    <strong>Nouvelle mission</strong>
+                    {task ? (
+                        <strong>Mission : {data.title}</strong>
+                    ) : (
+                        <strong>Nouvelle mission</strong>
+                    )}
                 </h2>
                 <FloatingLabel label="Nom de la mission" className="mb-4">
                     <Form.Control
@@ -101,9 +137,45 @@ const ModalNewTask = ({ show, onClose, id_yard }) => {
                         name="title"
                         value={data.title}
                         onChange={handleChange}
+                        readOnly={user?.type === 'project_owner'}
                     />
                 </FloatingLabel>
-                <ReactQuill className="mb-5" value={data.description} onChange={handleQuillChange} />
+                <ReactQuill
+                    readOnly={user?.type === 'project_owner'}
+                    className="mb-4"
+                    value={data.description}
+                    onChange={handleQuillChange}
+                />
+                {task && (
+                    <>
+                        <label>État</label>
+                        <Form.Select
+                            className="mb-4"
+                            name="state"
+                            onChange={handleChange}
+                            disabled={user?.type === 'project_owner'}
+                        >
+                            <option value="todo" selected={data.state === 'todo'}>À faire</option>
+                            <option value="doing" selected={data.state === 'doing'}>En cours</option>
+                            <option value="done" selected={data.state === 'done'}>Fait</option>
+                        </Form.Select>
+                        <Form.Switch
+                            name="executor_validated"
+                            label="Réalisation validée par l'exécutant"
+                            checked={data.executor_validated}
+                            onChange={handleCheckboxChange}
+                            disabled={user?.id_user !== data.id_executor}
+                        />
+                        <Form.Switch
+                            name="supervisor_validated"
+                            label="Réalisation validée par le superviseur"
+                            onChange={handleCheckboxChange}
+                            checked={data.supervisor_validated}
+                            disabled={user?.type !== 'supervisor'}
+                        />
+                    </>
+                )}
+                <hr style={{ color: theme.primary, height: 3 }} />
                 <label>Période estimée</label>
                 <DateRangeInput
                     showSelectedDates={false}
@@ -122,24 +194,51 @@ const ModalNewTask = ({ show, onClose, id_yard }) => {
                     startDate={data.start_planned_date}
                     endDate={data.end_planned_date}
                     focusedInput={state.focusedInput}
+                    placement="top"
+                />
+                <TimeInput
+                    label="Temps passé"
+                    name="time_spent"
+                    onChange={handleChange}
+                    invalid={errors.time_spent}
+                    value={data.time_spent}
+                    readOnly={user?.type === 'project_owner'}
                 />
                 <TimeInput
                     label="Temps estimé"
-                    className="mb-5"
+                    className="mb-4"
                     name="estimated_time"
                     onChange={handleChange}
                     invalid={errors.estimated_time}
+                    value={data.estimated_time}
+                    readOnly={user?.type === 'project_owner'}
                 />
-                <Card.Text className="mb-3">Entreprise assignée à la mission</Card.Text>
-                <Form.Select name="id_executor" className="mb-3" onChange={handleChange}>
-                    <option>Aucun prestataire</option>
+                <hr style={{ color: theme.primary, height: 3 }} />
+                <label>Entreprise assignée à la mission</label>
+                <Form.Select
+                    name="id_executor"
+                    className="mb-4"
+                    onChange={handleChange}
+                    disabled={user?.type === 'project_owner'}
+                >
+                    <option value="null">Aucun prestataire</option>
                     {enterprises.map((ent) => (
-                        <option key={ent.id_user} value={ent.id_user}>{ent.name}</option>
+                        <option
+                            key={ent.id_user}
+                            value={ent.id_user}
+                            selected={ent.id_user === data.id_executor}
+                        >
+                            {ent.name}
+                        </option>
                     ))}
                 </Form.Select>
                 <div className="d-flex justify-content-end">
-                    <Button variant="danger" onClick={onClose} className="me-3">Annuler</Button>
-                    <Button variant="success" onClick={handleSubmit}>Ajouter</Button>
+                    <Button variant="danger" onClick={onClose} className="me-3">
+                        {user?.type === 'project_owner' ? 'Fermer' : 'Annuler'}
+                    </Button>
+                    {user?.type !== 'project_owner' && (
+                        <Button variant="success" onClick={handleSubmit}>Enregistrer</Button>
+                    )}
                 </div>
             </Modal.Body>
         </Modal>
@@ -150,6 +249,12 @@ ModalNewTask.propTypes = {
     show: PropTypes.bool,
     onClose: PropTypes.func,
     id_yard: PropTypes.number.isRequired,
+    task: PropTypes.object,
+    user: PropTypes.shape(userShape),
+};
+
+ModalNewTask.propTypes = {
+    task: null,
 };
 
 export default ModalNewTask;

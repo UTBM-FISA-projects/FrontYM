@@ -9,12 +9,13 @@ import { TaskList } from '../TaskList';
 import { EstimatedTime } from '../EstimatedTime';
 import OptionsOverlay from './OptionsOverlay';
 
-import { isValidId, request, theme, yardShape } from '../../utils';
+import { isValidId, request, theme, userShape, yardShape } from '../../utils';
 
-const CardDashboardChantier = ({ userType, yard, onDelete, onArchive }) => {
+const CardDashboardChantier = ({ user, yard, onDelete, onArchive }) => {
     const {
         id_yard,
         name,
+        archived,
         supervisor,
         done_tasks,
         total_tasks,
@@ -42,13 +43,13 @@ const CardDashboardChantier = ({ userType, yard, onDelete, onArchive }) => {
             <Card.Body>
                 <Row className="text-start">
                     <Col style={{ borderRight: '1px #c2c2c2 solid' }}>
-                        <Link to={`/chantiers/${id_yard}`} style={{ color: theme.primaryDark }}>
+                        <Link to={`/chantiers/${id_yard}`} style={{ color: archived ? 'grey' : theme.primaryDark }}>
                             <h3>
-                                {userType === 'prestataire' && 'Prestation sur '}{name}
+                                {user.type === 'prestataire' && 'Prestation sur '}{name}
                                 {' '}<EyeFill size="0.8em" />
                             </h3>
                         </Link>
-                        {userType !== 'prestataire' && (
+                        {user.type !== 'prestataire' && (
                             <div className="mt-4">
                                 <h4>Progression générale</h4>
                                 <div>Progression du chantier</div>
@@ -56,7 +57,7 @@ const CardDashboardChantier = ({ userType, yard, onDelete, onArchive }) => {
                                 <EstimatedTime spentTime={total_time_spent} estimatedTime={total_estimated_time} />
                             </div>
                         )}
-                        {userType === 'prestataire' && (
+                        {user.type === 'prestataire' && (
                             <div className="mt-4">
                                 <h4>Prochaine intervention</h4>
                                 <Badge bg="light" text="dark" className="mt-3">Mercredi 27 octobre 2021 à 13h</Badge>
@@ -70,10 +71,10 @@ const CardDashboardChantier = ({ userType, yard, onDelete, onArchive }) => {
                     </Col>
                     <Col>
                         <h4>Mission en cours</h4>
-                        <TaskList id_yard={id_yard} />
+                        <TaskList id_yard={id_yard} user={user} />
                     </Col>
                 </Row>
-                {userType === 'project_owner' && (
+                {user.type === 'project_owner' && (
                     <div style={{ top: '2%', right: '0.5%', position: 'absolute' }}>
                         <OptionsOverlay id_yard={id_yard} onDelete={onDelete} onArchive={onArchive} />
                     </div>
@@ -84,7 +85,7 @@ const CardDashboardChantier = ({ userType, yard, onDelete, onArchive }) => {
 };
 
 CardDashboardChantier.propTypes = {
-    userType: PropTypes.oneOf(['project_owner', 'enterprise', 'supervisor']).isRequired,
+    user: PropTypes.shape(userShape).isRequired,
     yard: PropTypes.shape(yardShape).isRequired,
     onDelete: PropTypes.func,
     onArchive: PropTypes.func,

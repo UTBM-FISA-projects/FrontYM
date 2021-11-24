@@ -15,12 +15,20 @@ const TimeInput = (props) => {
         onChange,
         className,
         invalid,
+        value: valueProps,
+        readOnly,
     } = props;
 
     const [value, setValue] = React.useState('');
 
-    const handleChange = React.useCallback((e) => {
-        const { target: { value } } = e;
+    React.useEffect(() => {
+        if (valueProps) {
+            setValue(valueProps);
+        }
+    }, [valueProps]);
+
+    const handleChange = React.useCallback((event) => {
+        const { target: { value } } = event;
 
         let colonFound = false;
         let afterColon = 0;
@@ -32,7 +40,7 @@ const TimeInput = (props) => {
                 return true;
                 // si c'est un nombre ...
             } else if (allowedChars.exec(letter) !== null) {
-                // ... avant : -> OK
+                // ... avant ...
                 if (!colonFound) {
                     return true;
                     // ... des minutes -> OK
@@ -51,10 +59,12 @@ const TimeInput = (props) => {
         if (value.split('').every(validateLetter)) {
             setValue(value);
             if (onChange) {
-                onChange(e);
+                onChange({
+                    target: { name, value },
+                });
             }
         }
-    }, [onChange]);
+    }, [name, onChange]);
 
     return (
         <Form.Group className={className}>
@@ -67,6 +77,7 @@ const TimeInput = (props) => {
                 value={value}
                 onChange={handleChange}
                 isInvalid={invalid}
+                readOnly={readOnly}
             />
             <Form.Control.Feedback type="invalid">
                 Veuillez entrer une valeur de la forme HH:MM.
@@ -82,6 +93,8 @@ TimeInput.propTypes = {
     onChange: PropTypes.func,
     className: PropTypes.string,
     invalid: PropTypes.bool,
+    value: PropTypes.string,
+    readOnly: PropTypes.bool,
 };
 
 export default TimeInput;

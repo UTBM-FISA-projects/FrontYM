@@ -45,7 +45,7 @@ const CardDashboardChantier = ({ user, yard, onDelete, onArchive }) => {
                     <Col style={{ borderRight: '1px #c2c2c2 solid' }}>
                         <Link to={`/chantiers/${id_yard}`} style={{ color: archived ? 'grey' : theme.primaryDark }}>
                             <h3>
-                                {user.type === 'prestataire' && 'Prestation sur '}{name}
+                                {user.type === 'enterprise' && 'Prestation sur '}{name}
                                 {' '}<EyeFill size="0.8em" />
                             </h3>
                         </Link>

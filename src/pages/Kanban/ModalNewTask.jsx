@@ -137,11 +137,11 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                         name="title"
                         value={data.title}
                         onChange={handleChange}
-                        readOnly={user?.type === 'project_owner'}
+                        readOnly={user?.type !== 'supervisor'}
                     />
                 </FloatingLabel>
                 <ReactQuill
-                    readOnly={user?.type === 'project_owner'}
+                    readOnly={user?.type !== 'supervisor'}
                     className="mb-4"
                     value={data.description}
                     onChange={handleQuillChange}
@@ -153,7 +153,7 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                             className="mb-4"
                             name="state"
                             onChange={handleChange}
-                            disabled={user?.type === 'project_owner'}
+                            disabled={user?.type !== 'supervisor'}
                         >
                             <option value="todo" selected={data.state === 'todo'}>À faire</option>
                             <option value="doing" selected={data.state === 'doing'}>En cours</option>
@@ -177,32 +177,36 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                 )}
                 <hr style={{ color: theme.primary, height: 3 }} />
                 <label>Période estimée</label>
-                <DateRangeInput
-                    showSelectedDates={false}
-                    showClose={false}
-                    displayFormat="dd/MM/yyyy"
-                    weekdayLabelFormat={date.weekday}
-                    monthLabelFormat={date.month}
-                    phrases={{
-                        startDatePlaceholder: 'Début',
-                        endDatePlaceholder: 'Fin',
-                        close: 'Fermer',
-                        resetDates: 'Remettre à zéro',
-                    }}
-                    onDatesChange={handleDateChange}
-                    onFocusChange={focusedInput => dispatch({ type: 'focusChange', payload: focusedInput })}
-                    startDate={data.start_planned_date}
-                    endDate={data.end_planned_date}
-                    focusedInput={state.focusedInput}
-                    placement="top"
-                />
+                {user?.type !== 'supervisor' ? (
+                    <p>De {date.short(data.start_planned_date)} à {date.short(data?.end_planned_date)}</p>
+                ) : (
+                    <DateRangeInput
+                        showSelectedDates={false}
+                        showClose={false}
+                        displayFormat="dd/MM/yyyy"
+                        weekdayLabelFormat={date.weekday}
+                        monthLabelFormat={date.month}
+                        phrases={{
+                            startDatePlaceholder: 'Début',
+                            endDatePlaceholder: 'Fin',
+                            close: 'Fermer',
+                            resetDates: 'Remettre à zéro',
+                        }}
+                        onDatesChange={handleDateChange}
+                        onFocusChange={focusedInput => dispatch({ type: 'focusChange', payload: focusedInput })}
+                        startDate={data.start_planned_date}
+                        endDate={data.end_planned_date}
+                        focusedInput={state.focusedInput}
+                        placement="top"
+                    />
+                )}
                 <TimeInput
                     label="Temps passé"
                     name="time_spent"
                     onChange={handleChange}
                     invalid={errors.time_spent}
                     value={data.time_spent}
-                    readOnly={user?.type === 'project_owner'}
+                    readOnly={user?.type !== 'supervisor'}
                 />
                 <TimeInput
                     label="Temps estimé"
@@ -211,7 +215,7 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                     onChange={handleChange}
                     invalid={errors.estimated_time}
                     value={data.estimated_time}
-                    readOnly={user?.type === 'project_owner'}
+                    readOnly={user?.type !== 'supervisor'}
                 />
                 <hr style={{ color: theme.primary, height: 3 }} />
                 <label>Entreprise assignée à la mission</label>
@@ -219,7 +223,7 @@ const ModalNewTask = ({ show, onClose, id_yard, task, user }) => {
                     name="id_executor"
                     className="mb-4"
                     onChange={handleChange}
-                    disabled={user?.type === 'project_owner'}
+                    disabled={user?.type !== 'supervisor'}
                 >
                     <option value="null">Aucun prestataire</option>
                     {enterprises.map((ent) => (

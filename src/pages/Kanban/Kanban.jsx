@@ -46,7 +46,7 @@ const Kanban = (props) => {
                         </Card.Header>
                         <Card.Body className="overflow-auto">
                             <TaskList id_yard={id_yard} state="todo" user={user} />
-                            <ModalNewTask id_yard={id_yard} show={show} onClose={handleClose} />
+                            <ModalNewTask id_yard={id_yard} user={user} show={show} onClose={handleClose} />
                         </Card.Body>
                     </Card>
                 </Col>
